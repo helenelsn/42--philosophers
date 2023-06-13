@@ -3,3 +3,26 @@ Ne pas utiliser valgrind et -fsanitize=thread ensemble !
 
 Outil de détection d’erreurs de thread Helgrind : valgrind --tool=helgrind ./programme.
 Outil de détection d’erreurs de threads DRD : valgrind --tool=drd ./programme.
+
+
+---------------------------------------------------------------------
+
+
+Quand fait un mutex lock dans une fonction, unlock avant la fin de la fonction.
+
+Alterner un gaucher un droitier (gaucher nombres pairs, droitiers nombres impairs par ex).
+Faire en sorte qu’une des deux catégories parte avec un léger retard (car les threads ne sont pas simultanés, 
+ils sont lancés dans un while donc avec un léger décalage).
+
+
+Doit avoir un thread monitoring (voir qui est mort etc, ie chaque philo va dire quand il a mangé, 
+et si le monitoring détecte qu’un philo meurt, le dit a tous les autres et bla arrêter tous les threads).
+Monitoring : dans un while (1), check ainsi constamment le « status » de chaque philo. 
+Des qu’a check tous les philos, sleep pendant 1-2 sec sinon va utiliser tout le cpu 
+(car pourrait checker les status des philos plusieurs milliers de fois par seconde).
+
+Le thread monitoring peut tres bien être le thread initial ? ie celui de base, avant d’en créer d’autres
+
+
+Les fourchettes sont des mutex.
+Sécuriser l’écriture : l’écriture doit être un mutex aussi pour éviter d’écrire plusieurs fois au meme moment.
