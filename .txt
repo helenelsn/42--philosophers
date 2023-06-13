@@ -1,0 +1,5 @@
+Ne pas utiliser valgrind et -fsanitize=thread ensemble !
+
+
+Outil de détection d’erreurs de thread Helgrind : valgrind --tool=helgrind ./programme.
+Outil de détection d’erreurs de threads DRD : valgrind --tool=drd ./programme.
