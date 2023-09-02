@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/08/09 22:50:53 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/02 18:38:45 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,15 @@ void    *philo_routine(void *data)
         /* Sleep */
         pthread_mutex_lock(&philo->data->msg_display);
         // print sleeping msg
+        printf("%d is sleeping\n", philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
         usleep(philo->data->time_to_sleep);
 
         /* Think */
+        pthread_mutex_lock(&philo->data->msg_display);
+        // print thinkiing msg
+        printf("%d is thinking\n", philo->philo_id + 1);
+        pthread_mutex_unlock(&philo->data->msg_display);
         // When does this occur and how to implement it ?
     }
         
@@ -124,7 +129,7 @@ int main(int argc, char *argv)
         if (err)
             write(STDERR_FILENO, "pthread_create() failed\n", 24);
             // return ?
-        else
+        //else
             
         i++;
     }
