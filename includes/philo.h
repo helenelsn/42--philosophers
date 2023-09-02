@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 20:37:36 by Helene           ###   ########.fr       */
+/*   Updated: 2023/08/09 22:49:10 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,34 @@
 # define PHILO_H
 
 #include <pthread.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <sys/time.h>
+
+typedef struct  s_data
+{
+	int				philos_count;
+	/* int ou autre type de donnée ? */
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int 			number_of_times_each_philosopher_must_eat;
+	
+	/* equal amount of forks and philosophers */
+	pthread_mutex_t	*forks;
+	pthread_mutex_t msg_display;
+}               t_data;
 
 
+typedef struct  s_philo
+{
+	int				philo_id; // de 0 à [philos_count - 1]
+	int				meals_count;
+	int				last_meal_tstamp; // ?
+	pthread_t		tid;
+    struct s_data	*data; 
+}               t_philo;
 
 #endif 
