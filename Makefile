@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
+#    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/13 19:15:07 by Helene            #+#    #+#              #
-#    Updated: 2023/06/13 21:48:02 by Helene           ###   ########.fr        #
+#    Updated: 2023/09/04 19:04:13 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,12 @@ INC_DIR = ./includes/
 INC_FILES = $(addprefix $(INC_DIR), $(INC))
 
 SRC_DIR = ./sources/
-SRC = 	main.c 
+SRC = 	main.c \
+		monitoring.c \
+		initialise.c \
+		destroy.c \
+		ft_usleep.c \
+		ft_fprintf.c
 
 OBJ_DIR = ./objects/
 OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
