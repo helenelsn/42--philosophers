@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_usleep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:19:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/02 18:31:46 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/04 16:32:13 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ le ft_usleep ne doit durer que 2h
 
 quel type pour les time_to_die et time_to_eat ? 
 sachant qu'il s'qgit de millisecondes
+
+Passer directement en argument t_data, car aura aussi besoin de check la valeur de someone_died (?)
 */
 int    ft_usleep(unsigned long time_to_eat, unsigned long time_to_die)
 {

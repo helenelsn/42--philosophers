@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/02 18:37:35 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/04 16:28:42 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <pthread.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <pthread.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -24,10 +25,11 @@ typedef struct  s_data
 {
 	int				philos_count;
 	/* unsigned long ou autre type de donnée ? */
-	unsigned long				time_to_die;
-	unsigned long				time_to_eat;
-	unsigned long				time_to_sleep;
-	unsigned long 			number_of_times_each_philosopher_must_eat;
+	unsigned long	time_to_die;
+	unsigned long	time_to_eat;
+	unsigned long	time_to_sleep;
+	unsigned long 	number_of_times_each_philosopher_must_eat;
+	bool			someone_died;
 	
 	/* equal amount of forks and philosophers */
 	pthread_mutex_t	*forks;
