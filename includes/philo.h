@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/05 13:23:43 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/05 13:32:46 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int    ft_usleep(t_data *data, int state);
 /* initialise */
 void    init_mutexes(int philos_nb, t_data data, t_philo *philos);
 void    init_data(char **program_args, t_data *data);
-void    create_threads(int philos_nb, t_philo *philos, t_data data);
+void    create_threads(t_philo *philos, t_data data);
 
 /* monitoring */
 bool    ft_end_simulation(t_data data, t_philo *philos);

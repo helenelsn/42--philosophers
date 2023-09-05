@@ -6,23 +6,11 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/05 13:22:51 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/05 13:32:51 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-/*
-void    *thread_routine(void *data)
-{
-    pthread_t   tid;
-
-    tid = pthread_self();
-    printf("coucou du thread %ld\n", tid);
-
-    return (NULL);
-}
-*/
 
 /*
 argc[1] : number_of_philosophers ( = number of forks)
@@ -40,10 +28,10 @@ int main(int argc, char **argv)
     philos_nb = atoi(argv[1]); // remplacer par ft_atoi
     init_data(argv + 1, &data);
     /* Create threads */
-    philos = (t_philo *)malloc(sizeof(t_philo), philos_nb);
+    philos = (t_philo *)malloc(sizeof(t_philo), data.philos_count);
     if (!philos)
         return (EXIT_FAILURE);
-    create_threads(philos_nb, philos, data);
+    create_threads(philos, data);
     
     /* Monitoring */
     while(!ft_end_simulation(data, philos))
