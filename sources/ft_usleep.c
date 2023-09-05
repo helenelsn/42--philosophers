@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:19:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/05 13:11:33 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/05 20:23:19 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,17 @@ bool    ft_usleep(t_data *data, int state)
     unsigned int    state_time;
     unsigned int    time_to_die;
 
+    time_to_die = data->time_to_die;
     state_time = data->time_to_eat;
     if (state)
         state_time = data->time_to_sleep;
     while (state_time > 0 && time_to_die > 0)
     {
         if (ft_is_end(data)) // checks regularly if one of the philos died while eating/sleeping/thinking
+        {
+            // mettre end_simulation à true
             return (true);
+        }
         usleep(500);
         state_time -= 10;
         time_to_die -= 10;

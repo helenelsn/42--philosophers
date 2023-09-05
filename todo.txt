@@ -1,0 +1,1 @@
+- Gérer gettimeofday (format, conversion, calculs, mises à jour des variables)

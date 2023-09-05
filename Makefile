@@ -6,14 +6,14 @@
 #    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/13 19:15:07 by Helene            #+#    #+#              #
-#    Updated: 2023/09/05 13:25:07 by Helene           ###   ########.fr        #
+#    Updated: 2023/09/05 19:21:45 by Helene           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 NAME_BONUS = philo_bonus
 CC = cc
-CFLAGS = -g3  -fsanitize=address -g # -g pour afficher les numéros de lignes qui ont produit l'erreur
+CFLAGS = -g3  #-fsanitize=address -g # -g pour afficher les numéros de lignes qui ont produit l'erreur
 T_FLAGS = -fsanitize=thread -g
 # -Wall -Werror -Wextra 
 RM = rm -f
@@ -29,7 +29,8 @@ SRC = 	main.c \
 		initialise.c \
 		destroy.c \
 		ft_usleep.c \
-		ft_fprintf.c
+		ft_fprintf.c \
+		ft_atoi.c
 
 OBJ_DIR = ./objects/
 OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

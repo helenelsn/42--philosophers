@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/05 13:32:51 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/05 20:37:54 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,24 @@ argc[5] : /optional/ number_of_times_each_philosopher_must_eat
 */
 int main(int argc, char **argv)
 {
-    int     philos_nb;
-    t_data  data;
-    t_philo     *philos;
+    t_data          data;
+    t_philo         *philos;
+    struct timeval  start_sim;
 
-    philos_nb = atoi(argv[1]); // remplacer par ft_atoi
+    if (argc < 5 || argc > 6)
+        return (1);
+    
+    gettimeofday(&start_sim, NULL);
+    /* Initialise mutexes */
     init_data(argv + 1, &data);
+    
     /* Create threads */
-    philos = (t_philo *)malloc(sizeof(t_philo), data.philos_count);
+    philos = (t_philo *)malloc(sizeof(t_philo) * data.philos_count);
     if (!philos)
         return (EXIT_FAILURE);
     create_threads(philos, data);
+    
+    printf("ok ici\n");
     
     /* Monitoring */
     while(!ft_end_simulation(data, philos))
@@ -41,6 +48,6 @@ int main(int argc, char **argv)
     data.end_simulation = true;
     pthread_mutex_unlock(&data.end_simulation_m);
     
-    join_threads(philos_nb, philos);
-    destroy_mutexes(philos_nb, philos, data);
+    join_threads(philos);
+    destroy_mutexes(philos, data);
 }

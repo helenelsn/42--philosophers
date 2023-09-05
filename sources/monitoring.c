@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/05 13:19:07 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/05 20:13:20 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 /* Checks if the end_simulation variable is true */
 bool    ft_end_simulation(t_data data, t_philo *philos)
 {
-    bool    end_things;
-    int     ate_enough;
-    int     i;
+    struct timeval  time;
+    bool            end_things;
+    int             ate_enough;
+    int             i;
 
     end_things = false;
     i = 0;
