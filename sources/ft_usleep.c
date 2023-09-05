@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_usleep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:19:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/04 19:53:27 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/05 13:11:33 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../includes/philo.h"
 
 /*
 Gerer le cas ou, si un philo doit manger pendant 5h mais meurt
@@ -19,18 +21,27 @@ quel type pour les time_to_die et time_to_eat ?
 sachant qu'il s'qgit de millisecondes
 
 Passer directement en argument t_data, car aura aussi besoin de check la valeur de someone_died (?)
+
+States :    0 when eating
+            1 when sleeping
 */
-int    ft_usleep(unsigned long time_to_eat, unsigned long time_to_die)
+bool    ft_usleep(t_data *data, int state) 
 {
-    while (time_to_eat > 0 && time_to_die > 0)
+    unsigned int    state_time;
+    unsigned int    time_to_die;
+
+    state_time = data->time_to_eat;
+    if (state)
+        state_time = data->time_to_sleep;
+    while (state_time > 0 && time_to_die > 0)
     {
-        usleep(10);
-        time_to_eat -= 10;
+        if (ft_is_end(data)) // checks regularly if one of the philos died while eating/sleeping/thinking
+            return (true);
+        usleep(500);
+        state_time -= 10;
         time_to_die -= 10;
     }
-    /* Retoutne 1 dans le cas ou le philo a fini de manger normalement,
-    et 0 s'il est mort pendant */
-    if (time_to_eat > 0 )
-        return (0);
-    return (1);      
+    /* Retoutne 0 dans le cas ou le philo a fini de manger normalement,
+    et 1 s'il est mort pendant */
+    return (false);      
 }

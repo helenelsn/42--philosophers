@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialise.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 19:01:17 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/04 19:01:50 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/05 12:56:17 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void    init_mutexes(int philos_nb, t_data data, t_philo *philos)
     err = 0;
     while (i < philos_nb)
     {
-        err = pthread_mutex_init(&data.forks[i], NULL);
+        err = pthread_mutex_init(&data.forks[i], NULL); // doit malloc le *forks ?
         if (err)
             write(STDERR_FILENO, "pthread_mutex_init() failed\n", 28);
         err = pthread_mutex_init(&philos[i].meals_count_m, NULL);
@@ -40,12 +40,6 @@ void    init_mutexes(int philos_nb, t_data data, t_philo *philos)
     err = pthread_mutex_init(&data.end_simulation_m, NULL);
     if (err)
         write(STDERR_FILENO, "pthread_mutex_init() failed\n", 28);
-        
-    /* Meals count */
-    err = pthread_mutex_init(, NULL);
-    if (err)
-        write(STDERR_FILENO, "pthread_mutex_init() failed\n", 28);
-
 }
 
 void    init_data(char **program_args, t_data *data)

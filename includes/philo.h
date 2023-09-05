@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/04 19:09:38 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/05 12:46:30 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,23 @@ typedef struct  s_philo
     struct s_data	*data; 
 }               t_philo;
 
+enum	e_state
+{
+	eating,
+	sleeping,
+	thinking // ?
+};
+
+enum	e_fork
+{
+	left,
+	right,
+	both
+}
+
 /* ft_usleep */
-int    ft_usleep(unsigned long time_to_eat, unsigned long time_to_die);
+bool    ft_is_end(t_data *data);
+int    ft_usleep(t_data *data, int state);
 
 /* initialise */
 void    init_mutexes(int philos_nb, t_data data, t_philo *philos);

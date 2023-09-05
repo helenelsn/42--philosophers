@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/04 19:48:34 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/05 13:12:56 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
+/*
 void    *thread_routine(void *data)
 {
     pthread_t   tid;
@@ -21,69 +22,105 @@ void    *thread_routine(void *data)
 
     return (NULL);
 }
+*/
 
-void    *philo_routine(void *data)
+pthread_mutex_t *get_fork(t_philo *philo, int fork_status)
+{
+    if (fork_status == left)
+        return (&philo->data->forks[(philo->philo_id - 1) % philo->data->philos_count]); // a modifier ?
+    else if (fork_status == right)
+        return (&philo->data->forks[(philo->philo_id + 1) % philo->data->philos_count]);
+    return (NULL);
+}
+
+bool    ft_is_end(t_data *data)
+{
+    bool    is_end;
+
+    is_end = false;
+    pthread_mutex_lock(&data->end_simulation_m);
+    is_end = data->end_simulation;
+    pthread_mutex_unlock(&data->end_simulation_m);
+    return (is_end);   
+}
+
+bool    end_thread(t_philo *philo, int fork_status)
+{
+    if (!ft_is_end(philo->data))
+        return (false);
+    if (fork_status == left || fork_status == both)
+        pthread_mutex_unlock(get_fork(philo, left));
+    if (fork_status == right || fork_status == both)
+        pthread_mutex_unlock(get_fork(philo, right));
+    return (true);
+}
+
+void    *philo_routine(void *routine_data)
 {
     t_philo *philo;
-    bool    state;
+    bool    philo_state;
 
-    philo = data; // ça caste bien ?
-    state = true;
+    philo = routine_data; // ça caste bien ?
+    philo_state = true;
     if (philo->philo_id % 2) // ie ceux qui grab leurs fourchettes en deuxieme
         usleep(10); // quelle valeur ?
         // écrire aussi "is thinking" a la mano la premiere fois ici?
     
-    while (true) // degueulasse
+    while (true) // bof
     {
         /* Eat */
         if (philo->philo_id % 2 == 0) // pair, droitier (choix arbitraire)
         {
+            if (ft_is_end(philo->data))
+                return ;
             // fork à droite
-            pthread_mutex_lock(&philo->data->forks[(philo->philo_id + 1) % philo->data->philos_count]);
+            pthread_mutex_lock(get_fork(philo, right));
+            if (end_thread(philo, right))
+                return ;
             // fork à gauche
-            pthread_mutex_lock(&philo->data->forks[(philo->philo_id - 1) % philo->data->philos_count]); // a modifier
-            
-            pthread_mutex_lock(&philo->data->msg_display);
-            printf("%d is eating\n", philo->philo_id + 1);
-            pthread_mutex_unlock(&philo->data->msg_display);
-            usleep(philo->data->time_to_eat);
-            
-            pthread_mutex_unlock(&philo->data->forks[(philo->philo_id - 1) % philo->data->philos_count]); // a modifier
-            pthread_mutex_unlock(&philo->data->forks[(philo->philo_id + 1) % philo->data->philos_count]);
-            pthread_mutex_lock(&philo->meals_count_m);
-            philo->meals_count++;
-            pthread_mutex_unlock(&philo->meals_count_m);
+            pthread_mutex_lock(get_fork(philo, left));
         }
         else // impair, gauchier
         {
+            if (ft_is_end(philo->data))
+                return ;
             // fork à gauche
-            pthread_mutex_lock(&philo->data->forks[(philo->philo_id - 1) % philo->data->philos_count]); // a modifier
+            pthread_mutex_lock(get_fork(philo, left));
+            if (end_thread(philo, left))
+                return ;
             // fork à droite
-            pthread_mutex_lock(&philo->data->forks[(philo->philo_id + 1) % philo->data->philos_count]);
-            pthread_mutex_lock(&philo->data->msg_display);
-            printf("%d is eating\n", philo->philo_id + 1);
-            pthread_mutex_unlock(&philo->data->msg_display);
-            
-            ft_usleep(philo->data->time_to_eat, philo->data->time_to_die);
-        
-            pthread_mutex_unlock(&philo->data->forks[(philo->philo_id + 1) % philo->data->philos_count]);
-            pthread_mutex_unlock(&philo->data->forks[(philo->philo_id - 1) % philo->data->philos_count]); // a modifier
-            pthread_mutex_lock(&philo->meals_count_m);
-            philo->meals_count++;
-            pthread_mutex_unlock(&philo->meals_count_m);
+            pthread_mutex_lock(get_fork(philo, right));
         }
-        
-        pthread_mutex_lock(&philo->data->end_simulation_m);
-        if (philo->data->end_simulation)
-            state = false;
-        pthread_mutex_unlock(&philo->data->end_simulation_m);
+        if (end_thread(philo, both))
+            return ;
+        pthread_mutex_lock(&philo->data->msg_display);
+        printf("%d is eating\n", philo->philo_id + 1);
+        pthread_mutex_unlock(&philo->data->msg_display);
+        philo_state = ft_usleep(philo->data, eating);
+        if (philo->philo_id % 2 == 0)
+        {
+            pthread_mutex_unlock(get_fork(philo, left));
+            pthread_mutex_unlock(get_fork(philo, right));
+        }
+        else
+        {
+            pthread_mutex_unlock(get_fork(philo, right));
+            pthread_mutex_unlock(get_fork(philo, left));
+        }
+        if (philo_state)
+            return ;
+        pthread_mutex_lock(&philo->meals_count_m);
+        philo->meals_count++;
+        pthread_mutex_unlock(&philo->meals_count_m);
         
         /* Sleep */
         pthread_mutex_lock(&philo->data->msg_display);
         printf("%d is sleeping\n", philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
         
-        usleep(philo->data->time_to_sleep);
+        philo_state = ft_usleep(philo->data, sleeping);
+        if (philo_state)
+            return ;
 
         /* Think */
         pthread_mutex_lock(&philo->data->msg_display);
@@ -117,10 +154,8 @@ int main(int argc, char **argv)
     /* Monitoring */
     while(!ft_end_simulation(data, philos))
     {
-        usleep(10);
+        usleep(500); // usleep est en microsecondes
     }
-    
     join_threads(philos_nb, philos);
     destroy_mutexes(philos_nb, philos, data);
-    
 }
