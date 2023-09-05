@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitoring.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/04 19:57:37 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/05 13:19:07 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
         {
             pthread_mutex_lock(&data.msg_display);
             printf("%d has died\n", i + 1);
-            end_things = true;
             pthread_mutex_unlock(&data.msg_display);
+            end_things = true;
         }
         i++;
     }
@@ -56,6 +56,7 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
             pthread_mutex_lock(&philos[i].meals_count_m);
             if (philos[i].meals_count >= data.number_of_times_each_philosopher_must_eat)
                 ate_enough++;
+            pthread_mutex_unlock(&philos[i].meals_count_m);
             i++;
         }
         if (ate_enough == data.philos_count)

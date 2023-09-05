@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/05 12:46:30 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/05 13:23:43 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,12 @@ bool    ft_end_simulation(t_data data, t_philo *philos);
 /* destroy */
 void    join_threads(int philos_nb, t_philo *philos);
 void    destroy_mutexes(int philos_nb, t_philo *philos, t_data data);
+
+/* routine */
+// pthread_mutex_t *get_fork(t_philo *philo, int fork_status);
+bool    		ft_is_end(t_data *data);
+//bool    		end_thread(t_philo *philo, int fork_status);
+void    		*philo_routine(void *routine_data);
 
 
 
