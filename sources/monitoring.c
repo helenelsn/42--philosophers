@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/05 20:13:20 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/06 13:10:21 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
     pthread_mutex_unlock(&data.end_simulation_m); */
 
     /* If one died, there is no need to check if they ate enough*/
-    if (end_things)
-        return (end_things);
+    // if (end_things)
+    //     return (end_things);
 
     /* If the number_of_times_each_philosopher_must_eat variable is given,
     checks if all philosophers have eaten enough times.
@@ -60,6 +60,9 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
             pthread_mutex_unlock(&philos[i].meals_count_m);
             i++;
         }
+        pthread_mutex_lock(&data.msg_display);
+        printf("amount of philos who ate enough : %d\n", ate_enough);
+        pthread_mutex_unlock(&data.msg_display);
         if (ate_enough == data.philos_count)
             end_things = true;
     }

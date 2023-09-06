@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 13:22:20 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/05 20:29:59 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/06 13:02:58 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ bool    end_thread(t_philo *philo, int fork_status)
     if (fork_status == right || fork_status == both)
         pthread_mutex_unlock(get_fork(philo, right));
     return (true);
+}
+
+void    update_last_meal()
+{
+    
 }
 
 void    *philo_routine(void *routine_data)
@@ -111,8 +116,12 @@ void    *philo_routine(void *routine_data)
         pthread_mutex_lock(&philo->data->msg_display);
         printf("%d is eating\n", philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
-        gettimeofday(&time, NULL);
-        philo->last_meal_tstamp = tv.tv_usec
+        
+        /* Set the last_meal_tstamp */
+        update_last_meal();
+        gettimeofday(&tv, NULL);
+        philo->last_meal_tstamp = tv.tv_usec;
+        
         philo_state = ft_usleep(philo->data, eating);
         if (philo->philo_id % 2 == 0)
         {

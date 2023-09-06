@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:19:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/05 20:23:19 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/06 13:29:17 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,12 @@ bool    ft_usleep(t_data *data, int state)
     unsigned int    state_time;
     unsigned int    time_to_die;
 
-    time_to_die = data->time_to_die;
-    state_time = data->time_to_eat;
+    // if (!data->time_to_die)
+    //     return (true);
+    // if (!data->time_to_eat || !data->time_to_sleep)
+    //     return (false); // que faire ?
+    time_to_die = data->time_to_die * 1000;
+    state_time = data->time_to_eat * 1000;
     if (state)
         state_time = data->time_to_sleep;
     while (state_time > 0 && time_to_die > 0)
@@ -42,8 +46,8 @@ bool    ft_usleep(t_data *data, int state)
             return (true);
         }
         usleep(500);
-        state_time -= 10;
-        time_to_die -= 10;
+        state_time -= 500;
+        time_to_die -= 500;
     }
     /* Retoutne 0 dans le cas ou le philo a fini de manger normalement,
     et 1 s'il est mort pendant */

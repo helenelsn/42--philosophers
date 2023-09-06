@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/05 20:42:25 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/06 12:53:37 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ typedef struct  s_philo
 enum	e_state
 {
 	eating,
-	sleeping,
-	thinking // ?
+	sleeping
 };
 
 enum	e_fork
