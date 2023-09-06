@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitoring.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/06 13:10:21 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/06 19:15:19 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,17 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
         while (i < data.philos_count)
         {
             pthread_mutex_lock(&philos[i].meals_count_m);
+            /* pthread_mutex_lock(&data.msg_display);
+            printf("philo %d ate %d times\n", philos[i].philo_id + 1 ,philos[i].meals_count);
+            pthread_mutex_unlock(&data.msg_display); */
             if (philos[i].meals_count >= data.number_of_times_each_philosopher_must_eat)
                 ate_enough++;
             pthread_mutex_unlock(&philos[i].meals_count_m);
             i++;
         }
-        pthread_mutex_lock(&data.msg_display);
+        /* pthread_mutex_lock(&data.msg_display);
         printf("amount of philos who ate enough : %d\n", ate_enough);
-        pthread_mutex_unlock(&data.msg_display);
+        pthread_mutex_unlock(&data.msg_display); */
         if (ate_enough == data.philos_count)
             end_things = true;
     }

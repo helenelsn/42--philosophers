@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 13:22:20 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/06 13:02:58 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/06 19:58:23 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,15 @@ pthread_mutex_t *get_fork(t_philo *philo, int fork_status)
 bool    ft_is_end(t_data *data)
 {
     bool    is_end;
-
+	
     is_end = false;
     pthread_mutex_lock(&data->end_simulation_m);
     is_end = data->end_simulation;
     pthread_mutex_unlock(&data->end_simulation_m);
-    return (is_end);   
+    /* pthread_mutex_lock(&data->msg_display);
+    printf("ft_is_end(), ok ici\n");
+    pthread_mutex_unlock(&data->msg_display); */
+	return (is_end);   
 }
 
 bool    end_thread(t_philo *philo, int fork_status)
@@ -54,9 +57,27 @@ bool    end_thread(t_philo *philo, int fork_status)
     return (true);
 }
 
-void    update_last_meal()
+void    print_action() // prints the current's philo's action, giving the current timestamp in ms
 {
-    
+	
+}
+
+suseconds_t	get_current_time(t_data *data)
+{
+	struct timeval curr_tv;
+
+	gettimeofday(&curr_tv, NULL);
+	return (curr_tv.tv_sec * 1000 - data->starting_time);
+}
+
+void    update_last_meal(t_philo *philo)
+{
+	struct timeval current_tv;
+	
+	gettimeofday(&current_tv, NULL);
+	pthread_mutex_lock(&philo->last_meal_m);
+	philo->last_meal_tstamp = current_tv.tv_sec * 1000 - philo->data->starting_time;
+	pthread_mutex_unlock(&philo->last_meal_m);
 }
 
 void    *philo_routine(void *routine_data)
@@ -73,54 +94,59 @@ void    *philo_routine(void *routine_data)
     
     while (true) // bof
     {
+/* 		pthread_mutex_lock(&philo->data->msg_display);
+            printf("dans philo %d, ok ici\n", philo->philo_id + 1);
+            pthread_mutex_unlock(&philo->data->msg_display); */
         /* Eat */
         if (philo->philo_id % 2 == 0) // pair, droitier (choix arbitraire)
         {
-            if (ft_is_end(philo->data))
-                return (NULL);
+    		pthread_mutex_lock(&philo->data->msg_display);
+            printf("dans philo %d, ok ici\n", philo->philo_id + 1);
+            pthread_mutex_unlock(&philo->data->msg_display);
+            /* if (ft_is_end(philo->data))
+                return (NULL); */
             // fork à droite
+			
             pthread_mutex_lock(get_fork(philo, right));
             pthread_mutex_lock(&philo->data->msg_display);
-            printf("%d grabbed a fork\n", philo->philo_id + 1);
+            printf("%ld ms %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
             pthread_mutex_unlock(&philo->data->msg_display);
-            // pthread_mutex_lock(&philo->data->msg_display);
-            // printf("dans philo %d, ok ici\n", philo->philo_id + 1);
-            // pthread_mutex_unlock(&philo->data->msg_display);
             if (end_thread(philo, right))
                 return (NULL);
             // fork à gauche
             pthread_mutex_lock(get_fork(philo, left));
             pthread_mutex_lock(&philo->data->msg_display);
-            printf("%d grabbed a fork\n", philo->philo_id + 1);
+            printf("%ld ms %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
             pthread_mutex_unlock(&philo->data->msg_display);
         }
         else // impair, gauchier
         {
-            if (ft_is_end(philo->data))
-                return (NULL);
+			pthread_mutex_lock(&philo->data->msg_display);
+            printf("dans philo %d, ok ici\n", philo->philo_id + 1);
+            pthread_mutex_unlock(&philo->data->msg_display);
+            /* if (ft_is_end(philo->data))
+                return (NULL); */
             // fork à gauche
             pthread_mutex_lock(get_fork(philo, left));
             pthread_mutex_lock(&philo->data->msg_display);
-            printf("%d grabbed a fork\n", philo->philo_id + 1);
+            printf("%ld ms %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
             pthread_mutex_unlock(&philo->data->msg_display);
             if (end_thread(philo, left))
                 return (NULL);
             // fork à droite
             pthread_mutex_lock(get_fork(philo, right));
             pthread_mutex_lock(&philo->data->msg_display);
-            printf("%d grabbed a fork\n", philo->philo_id + 1);
+            printf("%ld ms %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
             pthread_mutex_unlock(&philo->data->msg_display);
         }
         if (end_thread(philo, both))
             return (NULL);
         pthread_mutex_lock(&philo->data->msg_display);
-        printf("%d is eating\n", philo->philo_id + 1);
+        printf("%ld ms %d is eating\n", get_current_time(philo->data), philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
         
         /* Set the last_meal_tstamp */
-        update_last_meal();
-        gettimeofday(&tv, NULL);
-        philo->last_meal_tstamp = tv.tv_usec;
+        update_last_meal(philo);
         
         philo_state = ft_usleep(philo->data, eating);
         if (philo->philo_id % 2 == 0)
@@ -141,7 +167,7 @@ void    *philo_routine(void *routine_data)
         
         /* Sleep */
         pthread_mutex_lock(&philo->data->msg_display);
-        printf("%d is sleeping\n", philo->philo_id + 1);
+        printf("%ld ms %d is sleeping\n", get_current_time(philo->data), philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
         
         philo_state = ft_usleep(philo->data, sleeping);
@@ -150,7 +176,9 @@ void    *philo_routine(void *routine_data)
 
         /* Think */
         pthread_mutex_lock(&philo->data->msg_display);
-        printf("%d is thinking\n", philo->philo_id + 1);
+        printf("%ld ms %d is thinking\n", get_current_time(philo->data), philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
+		
+		//usleep(10);
     }
 }
