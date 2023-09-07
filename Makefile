@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
+#    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/13 19:15:07 by Helene            #+#    #+#              #
-#    Updated: 2023/09/05 19:21:45 by Helene           ###   ########.fr        #
+#    Updated: 2023/09/07 16:08:34 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ INC_FILES = $(addprefix $(INC_DIR), $(INC))
 SRC_DIR = ./sources/
 SRC = 	main.c \
 		routine.c \
+		eating.c \
 		monitoring.c \
 		initialise.c \
 		destroy.c \

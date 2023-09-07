@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/06 19:36:37 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/07 16:13:51 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct  s_data
 	suseconds_t	time_to_die;
 	suseconds_t	time_to_eat;
 	suseconds_t	time_to_sleep;
-	long long 	number_of_times_each_philosopher_must_eat; // mettre a -1 si n'a pas ce parametre dans argv
+	long 		number_of_times_each_philosopher_must_eat; // mettre a -1 si n'a pas ce parametre dans argv
 	bool		end_simulation;
 	suseconds_t starting_time; // se contente de lire son contenu donc pas besoin de mutex si?
 	
@@ -54,7 +54,8 @@ typedef struct  s_philo
 enum	e_state
 {
 	eating,
-	sleeping
+	sleeping,
+	thinking // useful for the print_action() function
 };
 
 enum	e_fork
@@ -81,10 +82,14 @@ void    join_threads(t_philo *philos);
 void    destroy_mutexes(t_philo *philos, t_data data);
 
 /* routine */
-// pthread_mutex_t *get_fork(t_philo *philo, int fork_status);
+suseconds_t		get_current_time(t_data *data);
 bool    		ft_is_end(t_data *data);
-//bool    		end_thread(t_philo *philo, int fork_status);
+bool    		end_thread(t_philo *philo, int fork_status);
 void    		*philo_routine(void *routine_data);
+
+/* eating */
+bool    eating_time(t_philo *philo);
+
 
 /* utils */
 int		ft_atoi(const char *nb_str);
