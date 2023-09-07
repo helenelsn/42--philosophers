@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitoring.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/06 19:15:19 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/07 13:02:56 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
         pthread_mutex_unlock(&data.msg_display); */
         if (ate_enough == data.philos_count)
             end_things = true;
+    }
+    if(end_things)
+    {
+        pthread_mutex_lock(&philos->data->end_simulation_m);
+        philos->data->end_simulation = true;
+        pthread_mutex_unlock(&philos->data->end_simulation_m);
     }
     return (end_things);
 }

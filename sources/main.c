@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/05 20:37:54 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/07 13:01:15 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ int main(int argc, char **argv)
     if (!philos)
         return (EXIT_FAILURE);
     create_threads(philos, data);
-    
-    printf("ok ici\n");
-    
+        
     /* Monitoring */
     while(!ft_end_simulation(data, philos))
         usleep(500); // usleep est en microsecondes
