@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eating.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:00:23 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/07 21:14:53 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/07 23:12:50 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,9 @@ bool    eating_time(t_philo *philo)
     /* Set the last_meal_tstamp */
     update_last_meal(philo);
     
-    pthread_mutex_lock(&philo->data->msg_display);
-    printf("dans philo %d, ok ici\n", philo->philo_id + 1);
-    pthread_mutex_unlock(&philo->data->msg_display);
+    // pthread_mutex_lock(&philo->data->msg_display);
+    // printf("dans philo %d, ok ici\n", philo->philo_id + 1);
+    // pthread_mutex_unlock(&philo->data->msg_display);
     
     is_alive = ft_usleep(philo->data, eating);
     if (philo->philo_id % 2 == 0)

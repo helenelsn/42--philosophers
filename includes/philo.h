@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/07 16:13:51 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/07 22:59:13 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct  s_data
 	suseconds_t	time_to_sleep;
 	long 		number_of_times_each_philosopher_must_eat; // mettre a -1 si n'a pas ce parametre dans argv
 	bool		end_simulation;
-	suseconds_t starting_time; // se contente de lire son contenu donc pas besoin de mutex si?
+	unsigned long starting_time; // se contente de lire son contenu donc pas besoin de mutex si?
 	
 	/* equal amount of forks and philosophers */
 	pthread_mutex_t	*forks;
@@ -93,5 +93,6 @@ bool    eating_time(t_philo *philo);
 
 /* utils */
 int		ft_atoi(const char *nb_str);
+long    get_timestamp(void);
 
 #endif 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialise.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 19:01:17 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/07 20:44:09 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/07 23:06:52 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void    create_threads(t_philo *philos, t_data data)
         philos[i].data = &data; 
         philos[i].philo_id = i;
         philos[i].tid = 0;
+        philos[i].last_meal_tstamp = data.starting_time;
         
         err = pthread_mutex_init(&philos[i].meals_count_m, NULL); // mutex à mettre dans data ou dans philo ?
         if (err)

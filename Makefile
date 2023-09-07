@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
+#    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/13 19:15:07 by Helene            #+#    #+#              #
-#    Updated: 2023/09/07 16:08:34 by hlesny           ###   ########.fr        #
+#    Updated: 2023/09/07 22:59:23 by Helene           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,8 @@ SRC = 	main.c \
 		destroy.c \
 		ft_usleep.c \
 		ft_fprintf.c \
-		ft_atoi.c
+		ft_atoi.c \
+		utils.c
 
 OBJ_DIR = ./objects/
 OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

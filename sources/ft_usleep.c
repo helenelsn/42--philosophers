@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_usleep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 18:19:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/07 21:04:04 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/07 23:32:26 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool    ft_usleep(t_data *data, int state)
     state_time = data->time_to_eat * 1000;
     if (state == sleeping)
         state_time = data->time_to_sleep * 1000;
-    while (state_time > 0 && time_to_die > 0)
+    while (state_time < time_to_die)
     {
         if (ft_is_end(data)) // checks regularly if one of the philos died while eating/sleeping/thinking
         {
@@ -38,9 +38,8 @@ bool    ft_usleep(t_data *data, int state)
             pthread_mutex_unlock(&data->end_simulation_m);
             return (false);
         }
-        usleep(200);
-        state_time -= 210;
-        time_to_die -= 210;
+        usleep(100);
+        state_time -= 130;
     }
     /* Retourne 1 dans le cas ou le philo a fini de manger normalement,
     et 0 s'il est mort pendant */

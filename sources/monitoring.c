@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitoring.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/07 21:02:59 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/07 23:26:29 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
     bool            end_things;
     int             ate_enough;
     int             i;
+    unsigned long   last_meal;
 
     end_things = false;
     i = 0;
@@ -28,9 +29,13 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
     gettimeofday(&time, NULL);
     while (i < data.philos_count && !end_things)
     {
-        if (((time.tv_sec * 1000 + time.tv_usec / 1000) - philos[i].last_meal_tstamp) >= data.time_to_die)
+        pthread_mutex_lock(&philos[i].last_meal_m);
+        last_meal = philos[i].last_meal_tstamp;
+        pthread_mutex_unlock(&philos[i].last_meal_m);
+        if ((get_timestamp() - last_meal) >= data.time_to_die)
         {
             pthread_mutex_lock(&data.msg_display);
+            printf("----------- \n starting time : %ld ms, current timestamp : %ld ms, last meal : %d ms, time to die : %d ms \n-----------\n ", data.starting_time, time.tv_sec * 1000 + time.tv_usec / 1000, last_meal, data.time_to_die);
             printf("%d has died\n", i + 1);
             pthread_mutex_unlock(&data.msg_display);
             end_things = true;
@@ -72,9 +77,9 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
         pthread_mutex_lock(&philos->data->end_simulation_m);
         philos->data->end_simulation = true;
         pthread_mutex_unlock(&philos->data->end_simulation_m);
-        /* pthread_mutex_lock(&data.msg_display);
+        pthread_mutex_lock(&data.msg_display);
         printf("amount of philos who ate enough : %d. Times they ate : %ld\n", ate_enough, data.number_of_times_each_philosopher_must_eat);
-        pthread_mutex_unlock(&data.msg_display); */
+        pthread_mutex_unlock(&data.msg_display);
     }
     return (end_things);
 }
