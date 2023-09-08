@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitoring.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/08 15:22:07 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/08 16:57:01 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ bool    ft_end_simulation(t_data data, t_philo *philos)
             pthread_mutex_lock(&data.msg_display);
             // printf("----------- \n starting time : %ld ms, current timestamp : %ld ms, last meal : %d ms, time to die : %d ms \n-----------\n ", data.starting_time, time.tv_sec * 1000 + time.tv_usec / 1000, last_meal, data.time_to_die);
             // printf("gettimestamp() - last_meal = %lu\n", get_timestamp() - last_meal);
+            printf("in monitoring\n");
             printf("%d ms %d has died\n", get_current_time(&data), i + 1);
             pthread_mutex_unlock(&data.msg_display);
             end_things = true;
@@ -122,8 +123,7 @@ void    supervise_simulation(t_philo *philos)
     end_simulation = false;
     while (end_simulation == false)
     {
-        end_simulation = check_hunger(philos);
-        end_simulation = check_meals_count(philos);
+        end_simulation = (check_hunger(philos) | check_meals_count(philos));
         if (end_simulation)
         {
             pthread_mutex_lock(&philos->data->end_simulation_m);

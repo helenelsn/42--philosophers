@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 13:22:20 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/08 15:05:03 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/08 17:00:17 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,10 @@ void    *philo_routine(void *routine_data)
         if (!eating_time(philo))
             return (NULL);
         
+        
         /* Sleep */
+        if (ft_is_end(philo->data))
+            return (NULL);
         pthread_mutex_lock(&philo->data->msg_display);
         printf("%ld ms %d is sleeping\n", get_current_time(philo->data), philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
@@ -67,6 +70,8 @@ void    *philo_routine(void *routine_data)
             return (NULL);
 
         /* Think */
+        if (ft_is_end(philo->data))
+            return (NULL);
         pthread_mutex_lock(&philo->data->msg_display);
         printf("%ld ms %d is thinking\n", get_current_time(philo->data), philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
