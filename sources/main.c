@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/07 20:08:43 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/08 15:17:29 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,10 @@ int main(int argc, char **argv)
     create_threads(philos, data);
         
     /* Monitoring */
-    while(!ft_end_simulation(data, philos))
-        usleep(100); // usleep est en microsecondes
-        
-    pthread_mutex_lock(&data.end_simulation_m);
-    data.end_simulation = true;
-    pthread_mutex_unlock(&data.end_simulation_m);
+    // while(!ft_end_simulation(data, philos))
+    //     usleep(100); // usleep est en microsecondes
+
+    supervise_simulation(philos);
     
     join_threads(philos);
     destroy_mutexes(philos, data);

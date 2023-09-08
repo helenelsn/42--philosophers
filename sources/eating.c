@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:00:23 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/07 23:12:50 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/08 15:01:21 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,8 @@ pthread_mutex_t *get_fork(t_philo *philo, int fork_status)
 
 void    update_last_meal(t_philo *philo)
 {
-	struct timeval current_tv;
-	
-	gettimeofday(&current_tv, NULL);
 	pthread_mutex_lock(&philo->last_meal_m);
-	philo->last_meal_tstamp = (current_tv.tv_sec * 1000 + current_tv.tv_usec / 1000); //- philo->data->starting_time;
+	philo->last_meal_tstamp = get_current_time(philo->data);
 	pthread_mutex_unlock(&philo->last_meal_m);
 }
 

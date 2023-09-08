@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 13:22:20 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/07 23:13:49 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/08 15:05:03 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,10 @@ void    *philo_routine(void *routine_data)
     is_alive = true;
     
     if (philo->philo_id % 2) // ie ceux qui grab leurs fourchettes en deuxieme
-        usleep(10); // quelle valeur ?
+        usleep(philo->data->time_to_eat * 500); // quelle valeur ?
     
-    while (true) // bof
+    while (true)
     {
-		/* pthread_mutex_lock(&philo->data->msg_display);
-        printf("dans philo %d, ok ici\n", philo->philo_id + 1);
-        pthread_mutex_unlock(&philo->data->msg_display); */
-            
         /* Eat */
         if (!eating_time(philo))
             return (NULL);
@@ -77,4 +73,5 @@ void    *philo_routine(void *routine_data)
 		
 		usleep((philo->data->time_to_die - (philo->data->time_to_eat + philo->data->time_to_sleep)) * 500);
     }
+    return (NULL);
 }

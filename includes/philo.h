@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/07 22:59:13 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/08 15:20:56 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void    init_data(char **program_args, t_data *data);
 void    create_threads(t_philo *philos, t_data data);
 
 /* monitoring */
+void    supervise_simulation(t_philo *philos);
 bool    ft_end_simulation(t_data data, t_philo *philos);
 
 /* destroy */
