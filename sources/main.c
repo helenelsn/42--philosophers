@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/08 15:17:29 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/09 13:29:23 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,22 @@ int main(int argc, char **argv)
 {
     t_data          data;
     t_philo         *philos;
-    struct timeval  start_sim;
 
     if (argc < 5 || argc > 6)
+    {
+        printf("This program requires between 4 and 5 arguments!\n");
+        printf("Example : ./philo 7 1500 300 200\n");
         return (1);
-    
-    gettimeofday(&start_sim, NULL);
+    }
     /* Initialise mutexes */
     init_data(argv + 1, &data);
-    
     /* Create threads */
     philos = (t_philo *)malloc(sizeof(t_philo) * data.philos_count);
     if (!philos)
-        return (EXIT_FAILURE);
+        return (2);
     create_threads(philos, data);
-        
-    /* Monitoring */
-    // while(!ft_end_simulation(data, philos))
-    //     usleep(100); // usleep est en microsecondes
-
     supervise_simulation(philos);
-    
     join_threads(philos);
     destroy_mutexes(philos, data);
+    free_all(data, philos);
 }

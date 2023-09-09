@@ -6,7 +6,7 @@
 #    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/13 19:15:07 by Helene            #+#    #+#              #
-#    Updated: 2023/09/07 22:59:23 by Helene           ###   ########.fr        #
+#    Updated: 2023/09/09 12:54:52 by Helene           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,6 @@ SRC = 	main.c \
 		monitoring.c \
 		initialise.c \
 		destroy.c \
-		ft_usleep.c \
 		ft_fprintf.c \
 		ft_atoi.c \
 		utils.c

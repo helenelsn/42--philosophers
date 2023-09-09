@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 13:22:20 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/08 17:00:17 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/09 13:29:37 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@ bool    ft_is_end(t_data *data)
     pthread_mutex_lock(&data->end_simulation_m);
     is_end = data->end_simulation;
     pthread_mutex_unlock(&data->end_simulation_m);
-    /* pthread_mutex_lock(&data->msg_display);
-    printf("ft_is_end(), end_simulation = %d\n", is_end);
-    pthread_mutex_unlock(&data->msg_display); */
 	return (is_end);   
 }
 
@@ -31,13 +28,7 @@ void    print_action() // prints the current's philo's action, giving the curren
 	
 }
 
-suseconds_t	get_current_time(t_data *data)
-{
-	struct timeval curr_tv;
 
-	gettimeofday(&curr_tv, NULL);
-	return ((curr_tv.tv_sec * 1000 + curr_tv.tv_usec / 1000) - data->starting_time);
-}
 
 void    *philo_routine(void *routine_data)
 {
@@ -57,12 +48,11 @@ void    *philo_routine(void *routine_data)
         if (!eating_time(philo))
             return (NULL);
         
-        
         /* Sleep */
         if (ft_is_end(philo->data))
             return (NULL);
         pthread_mutex_lock(&philo->data->msg_display);
-        printf("%ld ms %d is sleeping\n", get_current_time(philo->data), philo->philo_id + 1);
+        printf("%ld %d is sleeping\n", get_current_time(philo->data), philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
         
         is_alive = ft_usleep(philo->data, sleeping);
@@ -73,7 +63,7 @@ void    *philo_routine(void *routine_data)
         if (ft_is_end(philo->data))
             return (NULL);
         pthread_mutex_lock(&philo->data->msg_display);
-        printf("%ld ms %d is thinking\n", get_current_time(philo->data), philo->philo_id + 1);
+        printf("%ld %d is thinking\n", get_current_time(philo->data), philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
 		
 		usleep((philo->data->time_to_die - (philo->data->time_to_eat + philo->data->time_to_sleep)) * 500);

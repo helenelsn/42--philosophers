@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/08 15:20:56 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/09 13:28:51 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@
 
 typedef struct  s_data
 {
-	int				philos_count; // ou unsigned int ?
-	/* unsigned long ou autre type de donnée ? */
-	suseconds_t	time_to_die;
-	suseconds_t	time_to_eat;
-	suseconds_t	time_to_sleep;
-	long 		number_of_times_each_philosopher_must_eat; // mettre a -1 si n'a pas ce parametre dans argv
-	bool		end_simulation;
-	unsigned long starting_time; // se contente de lire son contenu donc pas besoin de mutex si?
+	int				philos_count;
 	
-	/* equal amount of forks and philosophers */
+	/* Quel type de données ? */
+	suseconds_t		time_to_die;
+	suseconds_t		time_to_eat;
+	suseconds_t		time_to_sleep;
+	
+	long 			number_of_times_each_philosopher_must_eat;
+	bool			end_simulation;
+	unsigned long 	starting_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t msg_display;
 	pthread_mutex_t	end_simulation_m;
@@ -65,10 +65,6 @@ enum	e_fork
 	both
 };
 
-/* ft_usleep */
-bool    ft_is_end(t_data *data);
-bool    ft_usleep(t_data *data, int state);
-
 /* initialise */
 void    init_data_mutexes(t_data *data);
 void    init_data(char **program_args, t_data *data);
@@ -78,22 +74,22 @@ void    create_threads(t_philo *philos, t_data data);
 void    supervise_simulation(t_philo *philos);
 bool    ft_end_simulation(t_data data, t_philo *philos);
 
-/* destroy */
-void    join_threads(t_philo *philos);
-void    destroy_mutexes(t_philo *philos, t_data data);
+/* eating */
+bool    eating_time(t_philo *philo);
 
 /* routine */
-suseconds_t		get_current_time(t_data *data);
 bool    		ft_is_end(t_data *data);
 bool    		end_thread(t_philo *philo, int fork_status);
 void    		*philo_routine(void *routine_data);
 
-/* eating */
-bool    eating_time(t_philo *philo);
-
+/* destroy */
+void    join_threads(t_philo *philos);
+void    destroy_mutexes(t_philo *philos, t_data data);
+void    free_all(t_data data, t_philo *philos);
 
 /* utils */
-int		ft_atoi(const char *nb_str);
-long    get_timestamp(void);
+suseconds_t		get_current_time(t_data *data);
+bool    		ft_usleep(t_data *data, int state);
+int				ft_atoi(const char *nb_str);
 
 #endif 

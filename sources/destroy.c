@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 19:02:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/05 18:06:46 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/09 13:26:40 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,10 @@ void    destroy_mutexes(t_philo *philos, t_data data)
     err = pthread_mutex_destroy(&data.end_simulation_m);
     if (err)
         write(STDERR_FILENO, "pthread_mutex_destroy() failed\n", 28);
+}
+
+void    free_all(t_data data, t_philo *philos)
+{
+    free(data.forks);
+    free(philos);
 }

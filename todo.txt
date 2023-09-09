@@ -1,1 +1,1 @@
-- Gérer gettimeofday (format, conversion, calculs, mises à jour des variables)
+- Programme ne s'arrete pas avec par exemple ./philo 1 1500 600 200 (avec 1 philo quoi)
