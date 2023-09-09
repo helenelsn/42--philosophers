@@ -6,18 +6,18 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/09 12:54:42 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/09 23:10:22 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-suseconds_t	get_current_time(t_data *data)
+long	get_current_time(t_philo *philo)
 {
 	struct timeval curr_tv;
 
 	gettimeofday(&curr_tv, NULL);
-	return ((curr_tv.tv_sec * 1000 + curr_tv.tv_usec / 1000) - data->starting_time);
+	return ((curr_tv.tv_sec * 1000 + curr_tv.tv_usec / 1000) - philo->starting_time);
 }
 
 /*
@@ -27,19 +27,21 @@ le ft_usleep ne doit durer que 2h
 
 States :    0 when eating
             1 when sleeping
+            2 when thinking
 */
-bool    ft_usleep(t_data *data, int state) 
+void    ft_usleep(t_philo *philo, int state) 
 {
     unsigned int    state_length;
     
-    state_length = get_current_time(data) + data->time_to_eat;
+    state_length = get_current_time(philo) + philo->time_to_eat;
     if (state == sleeping)
-        state_length = get_current_time(data) + data->time_to_sleep;
-    while (get_current_time(data) < state_length)
+        state_length = get_current_time(philo) + philo->time_to_sleep;
+    else if (state == thinking)
+        state_length = get_current_time(philo) + ((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep) / 2);
+    while (get_current_time(philo) < state_length)
     {
         if (ft_is_end(data))
-            return (false);
+            return ;
         usleep(100);
     }
-    return (true);      
 }
