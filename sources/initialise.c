@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 19:01:17 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/08 15:01:32 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/09 13:56:21 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,10 @@ void    create_threads(t_philo *philos, t_data data)
         err = pthread_mutex_init(&philos[i].meals_count_m, NULL); // mutex à mettre dans data ou dans philo ?
         if (err)
             write(STDERR_FILENO, "pthread_mutex_init() failed\n", 28);
-
+        err = pthread_mutex_init(&philos[i].last_meal_m, NULL);
+        if (err)
+            write(STDERR_FILENO, "pthread_mutex_init() failed\n", 28);
+        
         err = pthread_create(&philos[i].tid, NULL, philo_routine, (void *)&philos[i]);
         if (err)
             write(STDERR_FILENO, "pthread_create() failed\n", 24);

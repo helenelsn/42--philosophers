@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/09 13:20:05 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/09 13:53:36 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ bool    check_hunger(t_philo *philos)
     unsigned long   last_meal;
 
     i = 0;
+    last_meal = 0;
     while (i < philos->data->philos_count)
     {
         pthread_mutex_lock(&philos[i].last_meal_m);
