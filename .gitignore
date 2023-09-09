@@ -1,6 +1,5 @@
 *.vscode
 *.o
-philo
 *.git
 
 todo.txt
