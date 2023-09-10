@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/09 21:34:20 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/10 18:36:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ bool    eating_time(t_philo *philo);
 bool    ft_is_end(t_data *data);
 bool    end_thread(t_philo *philo, int fork_status);
 void    *philo_routine(void *routine_data);
+void    *philo_routine_one(void *routine_data);
 
 /* destroy */
 void    join_threads(t_philo *philos);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
+#    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:42:20 by Helene            #+#    #+#              #
-#    Updated: 2023/09/09 22:26:17 by Helene           ###   ########.fr        #
+#    Updated: 2023/09/10 22:38:55 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ INC_FILES = $(addprefix $(INC_DIR), $(INC))
 SRC_DIR = ./sources/
 SRC = 	main.c \
 		utils.c \
+		initialise.c \
 		ft_atoi.c 
 
 OBJ_DIR = ./objects/

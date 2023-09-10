@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitoring.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/09 18:15:22 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/10 21:04:47 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void    supervise_simulation(t_philo *philos)
             philos->data->end_simulation = true;
             pthread_mutex_unlock(&philos->data->end_simulation_m);
         }
-        usleep(50);
+        usleep(100);
     }
     return ;
 }

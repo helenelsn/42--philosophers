@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialise.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 19:01:17 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/09 13:56:21 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/10 19:20:42 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,15 @@ void    init_data(char **program_args, t_data *data)
     init_data_mutexes(data);
 }
 
+void    init_philo(t_philo *philo, t_data *data, int i)
+{
+    philo->meals_count = 0;
+    philo->data = data;
+    philo->philo_id = i;
+    philo->tid = 0;
+    philo->last_meal_tstamp = 0;
+}
+
 void    create_threads(t_philo *philos, t_data data)
 {
     int i;
@@ -68,11 +77,12 @@ void    create_threads(t_philo *philos, t_data data)
     err = 0;
     while (i < data.philos_count)
     {
-        philos[i].meals_count = 0;
+        /* philos[i].meals_count = 0;
         philos[i].data = &data; 
         philos[i].philo_id = i;
         philos[i].tid = 0;
-        philos[i].last_meal_tstamp = 0;
+        philos[i].last_meal_tstamp = 0; */
+        init_philo(&philos[i], &data, i);
         
         err = pthread_mutex_init(&philos[i].meals_count_m, NULL); // mutex à mettre dans data ou dans philo ?
         if (err)
@@ -81,10 +91,12 @@ void    create_threads(t_philo *philos, t_data data)
         if (err)
             write(STDERR_FILENO, "pthread_mutex_init() failed\n", 28);
         
-        err = pthread_create(&philos[i].tid, NULL, philo_routine, (void *)&philos[i]);
+        if (data.philos_count == 1)
+            err = pthread_create(&philos[i].tid, NULL, philo_routine_one, (void *)&philos[i]);
+        else
+            err = pthread_create(&philos[i].tid, NULL, philo_routine, (void *)&philos[i]);
         if (err)
             write(STDERR_FILENO, "pthread_create() failed\n", 24);
-            // return ?
         i++;
     }
 }

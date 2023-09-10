@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   destroy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 19:02:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/09 16:51:12 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/10 21:11:55 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ void    destroy_mutexes(t_philo *philos, t_data data)
     }
     err = pthread_mutex_destroy(&data.msg_display);
     if (err)
-    {
-        //perror("pthread_mutex_destroy (msg display)");
         write(STDERR_FILENO, "pthread_mutex_destroy() failed\n", 28);
-    }
     err = pthread_mutex_destroy(&data.end_simulation_m);
     if (err)
         write(STDERR_FILENO, "pthread_mutex_destroy() failed\n", 28);

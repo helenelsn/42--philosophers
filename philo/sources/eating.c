@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eating.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:00:23 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/09 16:37:37 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/10 21:12:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 pthread_mutex_t *get_fork(t_philo *philo, int fork_status)
 {
+    /* if (philo->data->philos_count == 1 && fork_status == left)
+        return (NULL); */
     if (fork_status == left)
     {
         if (philo->philo_id == 0)
@@ -45,10 +47,10 @@ void    update_last_meal(t_philo *philo)
 
 bool    take_forks(t_philo *philo)
 {
+    if (ft_is_end(philo->data))
+            return (false);
     if (philo->philo_id % 2 == 0) // pair, droitier (choix arbitraire)
     {   
-        if (ft_is_end(philo->data))
-            return (false);
         pthread_mutex_lock(get_fork(philo, right));
         if (end_thread(philo, right))
             return (false);
@@ -59,8 +61,6 @@ bool    take_forks(t_philo *philo)
     }
     else // impair, gauchier
     {
-        if (ft_is_end(philo->data))
-            return (false);
         pthread_mutex_lock(get_fork(philo, left));
         if (end_thread(philo, left))
             return (false);
@@ -69,6 +69,8 @@ bool    take_forks(t_philo *philo)
         pthread_mutex_unlock(&philo->data->msg_display);
         pthread_mutex_lock(get_fork(philo, right));
     }
+    if (end_thread(philo, both))
+        return (false);
     return (true);
 }
 
@@ -93,12 +95,10 @@ bool    eating_time(t_philo *philo)
     
     if (take_forks(philo) == false)
         return (NULL);
-    if (end_thread(philo, both))
-            return (false);
     pthread_mutex_lock(&philo->data->msg_display);
     printf("%ld %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
     pthread_mutex_unlock(&philo->data->msg_display);
-    if (ft_is_end(philo->data))
+    if (end_thread(philo, both))
         return (false);
     pthread_mutex_lock(&philo->data->msg_display);
     printf("%ld %d is eating\n", get_current_time(philo->data), philo->philo_id + 1);
@@ -106,6 +106,8 @@ bool    eating_time(t_philo *philo)
 
     update_last_meal(philo);
     
+    if (end_thread(philo, both))
+        return (false);
     ft_usleep(philo->data, eating);
     drop_forks(philo);
     

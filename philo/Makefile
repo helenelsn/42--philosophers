@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
+#    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:38:24 by Helene            #+#    #+#              #
-#    Updated: 2023/09/09 20:39:14 by Helene           ###   ########.fr        #
+#    Updated: 2023/09/10 17:53:53 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,11 +34,11 @@ SRC = 	main.c \
 OBJ_DIR = ./objects/
 OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
-DEP_OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.d))
+#DEP_OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.d))
 
--include $(DEP_OBJS)
+#-include $(DEP_OBJS)
 
-export C_INCLUDE_PATH = $(INC_DIR):$(INC_BONUS_DIR)
+#export C_INCLUDE_PATH = $(INC_DIR):$(INC_BONUS_DIR)
 # pas besoin d'export LIBRARY_PATH car n'utilise pas de librairie(s) ici
 
 all : $(NAME)
@@ -46,7 +46,7 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	$(CC) -o $@ $(OBJS)
 
-$(OBJ_DIR)%.o : $(SRC_DIR)%.c #$(INC_FILES)
+$(OBJ_DIR)%.o : $(SRC_DIR)%.c $(INC_FILES)
 	mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCS_DIR) -pthread
 
