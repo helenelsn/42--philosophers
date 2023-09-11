@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/10 23:52:23 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/11 21:50:12 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,18 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <signal.h>
 #include <sys/wait.h>
 #include <sys/stat.h> // pour obtenir les définitions des bits de permissions
 #include <semaphore.h>
 
-# define SEMA_MODES		S_IRUSR | S_IWUSR
-# define SEMA_FLAGS		O_CREAT | O_EXCL
+# define SEMA_MODES		S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
+# define SEMA_FLAGS		O_CREAT //| O_EXCL
 # define SEMA_FORKS 	"/philo_forks"
 # define SEMA_STREAM	"/philo_state_display"
 # define SEMA_MEALS		"/philo_meals_count"
 # define SEMA_DEATH 	"/philo_one_died"
+# define SEMA_LAST_MEAL	"/philo_last_meal_timestamp"
 
 
 enum	e_state
@@ -39,7 +41,7 @@ enum	e_state
 	eating,
 	sleeping,
 	thinking, // useful for the print_action() function
-	fork
+	got_fork
 };
 
 enum 	e_forks
@@ -58,7 +60,7 @@ typedef struct  s_philo
 	unsigned int	meals_count;
 	unsigned long 	starting_time;
 	unsigned long	last_meal_tstamp;
-	sem_t 			*last_meal_sem;
+	sem_t 			*sem_last_meal;
 }               t_philo;
 
 typedef struct 	s_data
@@ -66,20 +68,37 @@ typedef struct 	s_data
 	pthread_t	check_death;
 	pthread_t 	check_meals;
 	int			philos_count;
+	bool 		stop_sim;
 	pid_t 		*pids;
-	sem_t   	*forks;
-    sem_t   	*state_msg;
-	sem_t 		*ate_enough;
-	sem_t 		*one_died;
+	sem_t		*sem_forks;
+    sem_t		*sem_state_msg;
+	sem_t		*sem_ate_enough;
+	sem_t		*sem_one_died;
 	
 }				t_data;
 
 /* initialise */
-void    init_data(t_data *data, char *count);
+bool    init_data(t_data *data, char *count);
+bool    init_philo(t_philo *philo, char **args);
+
+/* routine */
+void    self_monitoring(t_philo *philo, t_data *data);
+void    philo_process(t_philo *philo, t_data *data, int i);
+
+/* main monitoring */
+void    *check_meals_routine(void *data_check);
+void    *check_death_routine(void *data_check);
+void    parent_process(t_philo *philo, t_data *data);
+
+/* destroy */
+void    kill_processes(t_data *data);
+void    exit_philo(t_philo *philo, t_data *data);
+void    exit_parent(t_philo *philo, t_data *data);
 
 /* utils */
 long	get_current_time(t_philo *philo);
-void    ft_usleep(t_philo *philo, int state) ;
+void    ft_usleep(t_philo *philo, t_data *data, int state) ;
 int		ft_atoi(const char *nb_str);
+void    print_state(t_philo *philo, t_data *data, int state);
 
 #endif

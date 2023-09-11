@@ -6,11 +6,27 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/09 23:10:22 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/11 23:15:34 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../includes/philo_bonus.h"
+
+void    print_state(t_philo *philo, t_data *data, int state)
+{
+    sem_wait(data->sem_state_msg);
+    dprintf(2, "print_state()\n");
+    printf("%ld %d ", get_current_time(philo), philo->philo_id + 1);
+    if (state == eating)
+        printf("is eating\n");
+    else if (state == sleeping)
+        printf("is sleeping\n");
+    else if (state == thinking) 
+        printf("is thinking\n");
+    else if (state == got_fork)
+        printf("has taken a fork\n");
+    sem_post(data->sem_state_msg);
+}
 
 long	get_current_time(t_philo *philo)
 {
@@ -21,15 +37,11 @@ long	get_current_time(t_philo *philo)
 }
 
 /*
-Gerer le cas ou, si un philo doit manger pendant 5h mais meurt
-s'il n'a pas fini de manger au bout de 2h, 
-le ft_usleep ne doit durer que 2h
-
 States :    0 when eating
             1 when sleeping
             2 when thinking
 */
-void    ft_usleep(t_philo *philo, int state) 
+void    ft_usleep(t_philo *philo, t_data *data, int state) 
 {
     unsigned int    state_length;
     
@@ -40,8 +52,9 @@ void    ft_usleep(t_philo *philo, int state)
         state_length = get_current_time(philo) + ((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep) / 2);
     while (get_current_time(philo) < state_length)
     {
-        if (ft_is_end(data))
-            return ;
+        /*if (ft_is_end(data))
+            return ;*/
+        self_monitoring(philo, data);
         usleep(100);
     }
 }
