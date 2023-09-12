@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 20:43:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 01:15:24 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 01:43:14 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ int main(int argc, char **argv)
     }
     
     /* Create monitoring threads */
-    //create_threads(&data, argc - 1);
-    //parent_process(&philo, &data);
+    create_threads(&data, argc - 1);
+    parent_process(&philo, &data);
 
     /* Wait for childs processes */
     i = 0;

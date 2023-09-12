@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/11 23:15:34 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 01:41:24 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void    print_state(t_philo *philo, t_data *data, int state)
 {
     sem_wait(data->sem_state_msg);
-    dprintf(2, "print_state()\n");
     printf("%ld %d ", get_current_time(philo), philo->philo_id + 1);
     if (state == eating)
         printf("is eating\n");

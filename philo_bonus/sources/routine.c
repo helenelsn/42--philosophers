@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:24:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 00:55:02 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 01:53:15 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void    sleeping_state(t_philo *philo, t_data *data)
 {
-    dprintf(2, "sleeping_state()\n");
     print_state(philo, data, sleeping);
     ft_usleep(philo, data, sleeping);
 }
@@ -29,9 +28,11 @@ void    self_monitoring(t_philo *philo, t_data *data)
 {
     unsigned long   last_meal;
     
-    // sem_wait(philo->sem_last_meal);
+    sem_wait(philo->sem_last_meal);
     last_meal = philo->last_meal_tstamp;
-    // sem_post(philo->sem_last_meal);
+    sem_post(philo->sem_last_meal);
+    printf("%d : get_current_time = %ld, last meal = %ld, last meal + time_to_die = %ld\n",
+        philo->philo_id + 1, get_current_time(philo), last_meal, last_meal + philo->time_to_die);
     
     if (get_current_time(philo) >= last_meal + philo->time_to_die)
     {
@@ -40,16 +41,13 @@ void    self_monitoring(t_philo *philo, t_data *data)
         printf("%ld %d died\n", get_current_time(philo), philo->philo_id);
         exit_philo(philo, data); 
     }
-    //dprintf(2, "self_monitoring()\n");
 }
 
 void    take_forks(t_philo *philo, t_data *data)
 {
     /*while (data->sem_forks->__align < 2) //check le retour du monitoring en meme temps ?
         usleep(10);*/
-    printf("lol from philo %d\n", philo->philo_id);
     sem_wait(data->sem_forks);
-    dprintf(2, "take_forks()\n");
     print_state(philo, data, got_fork);
     sem_wait(data->sem_forks);
     print_state(philo, data, got_fork);
@@ -64,10 +62,9 @@ void    drop_forks(t_philo *philo, t_data *data)
 void    eating_state(t_philo *philo, t_data *data)
 {
     /* update last meal timestamp */
-    // sem_wait(philo->sem_last_meal);
+    sem_wait(philo->sem_last_meal);
     philo->last_meal_tstamp = get_current_time(philo);
-    dprintf(2, "current last meal : %ld ms\n", philo->last_meal_tstamp);
-    // sem_post(philo->sem_last_meal);
+    sem_post(philo->sem_last_meal);
 
     print_state(philo, data, eating);
     ft_usleep(philo, data, eating);
@@ -92,20 +89,19 @@ void    philo_process(t_philo *philo, t_data *data, int i)
 
     while (true)
     {
-        //self_monitoring(philo, data);
-        dprintf(2, "philo_process(), ok ici\n");
+        self_monitoring(philo, data);
         
         take_forks(philo, data);
         eating_state(philo, data);
-        //self_monitoring(philo, data);
+        self_monitoring(philo, data);
         drop_forks(philo, data);
-        //self_monitoring(philo, data);
+        self_monitoring(philo, data);
 
         sleeping_state(philo, data);
-        //self_monitoring(philo, data);
+        self_monitoring(philo, data);
 
         thinking_state(philo, data);
-        //self_monitoring(philo, data);
+        self_monitoring(philo, data);
     }
     exit_philo(philo, data);
 }

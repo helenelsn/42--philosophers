@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:23:04 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 00:21:21 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 01:47:21 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void    *check_meals_routine(void *data_check)
     while (i < data->philos_count)
     {
         sem_wait(data->sem_ate_enough);
+        printf("incremented sem_ate_enough\n");
         i++;
     }
     sem_post(data->sem_one_died); // à vérifier

@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:42:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/11 21:29:20 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 01:35:46 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,10 @@ void    exit_philo(t_philo *philo, t_data *data)
     exit(1); 
 }
 
-void    unlink_semaphores(t_philo *philo, t_data *data)
-{
-    if (sem_unlink(SEMA_FORKS) < 0)
-        write(STDERR_FILENO, "sem_unlink() failed\n", 20);
-    if (sem_unlink(SEMA_STREAM) < 0)
-        write(STDERR_FILENO, "sem_unlink() failed\n", 20);
-}
-
 void    exit_parent(t_philo *philo, t_data *data)
 {
     close_semaphores(philo, data);
-    unlink_semaphores(philo, data);
+    //unlink_semaphores(philo, data);
     free(data->pids);
     data->pids = NULL;
 }
