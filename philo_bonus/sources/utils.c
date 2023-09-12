@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 01:41:24 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 14:54:10 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void    ft_usleep(t_philo *philo, t_data *data, int state)
         state_length = get_current_time(philo) + ((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep) / 2);
     while (get_current_time(philo) < state_length)
     {
-        /*if (ft_is_end(data))
-            return ;*/
         self_monitoring(philo, data);
         usleep(100);
     }

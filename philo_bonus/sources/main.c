@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 20:43:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 01:43:14 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 19:18:32 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,6 @@
     write(STDERR_FILENO, msg, ft_strlen(msg));
     free(msg);
 }*/
-
-
-
-void    create_threads(t_data *data, int args)
-{
-    int err;
-
-    err = pthread_create(&data->check_death, NULL, check_death_routine, (void *)data);
-    if (err)
-        write(STDERR_FILENO, "pthread_create() failed\n", 24);
-    if (args == 4)
-    {
-        err = pthread_create(&data->check_meals, NULL, check_meals_routine, (void *)data);
-        if (err)
-            write(STDERR_FILENO, "pthread_create() failed\n", 24);
-    }
-}
 
 int main(int argc, char **argv)
 {
@@ -70,22 +53,36 @@ int main(int argc, char **argv)
         if (data.pids[i] < 0)
             return (3);
         if (data.pids[i] == 0)
-            (philo_process(&philo, &data, i));
+        {
+            if (i % 2)
+                usleep(philo.time_to_eat * 500);
+            philo_process(&philo, &data, i);
+        }
         i++;
     }
     
     /* Create monitoring threads */
     create_threads(&data, argc - 1);
     parent_process(&philo, &data);
+    if (pthread_join(data.check_death, NULL))
+        write(STDERR_FILENO, "pthread_join() failed\n", 22);
+    if (argc == 6)
+    {
+        if (pthread_join(data.check_meals, NULL))
+            write(STDERR_FILENO, "pthread_join() failed\n", 22);
+    }
+    exit_parent(&philo, &data);
+    return (0);
 
-    /* Wait for childs processes */
+    /*
     i = 0;
     while (i < data.philos_count)
     {
+        printf("waiting for process %d\n", i);
         if (waitpid(data.pids[i], NULL, 0) < 0)
             write(STDERR_FILENO, "waitpid() failed\n", 17);
         i++;
     }
     dprintf(2, "apres les gosses\n");
-    exit_parent(&philo, &data);
+    exit_parent(&philo, &data);*/
 }

@@ -6,23 +6,11 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:42:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/12 01:35:46 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 19:01:47 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
-
-void    kill_processes(t_data *data)
-{
-    int i;
-
-    i = 0;
-    while (i < data->philos_count)
-    {
-        kill(data->pids[i], SIGKILL);
-        i++;
-    }
-}
 
 void    close_semaphores(t_philo *philo, t_data *data)
 {
@@ -36,6 +24,7 @@ void    close_semaphores(t_philo *philo, t_data *data)
 void    exit_philo(t_philo *philo, t_data *data)
 {
     close_semaphores(philo, data);
+    unlink_semaphores();
     free(data->pids);
     data->pids = NULL;
     exit(1); 
@@ -44,7 +33,9 @@ void    exit_philo(t_philo *philo, t_data *data)
 void    exit_parent(t_philo *philo, t_data *data)
 {
     close_semaphores(philo, data);
-    //unlink_semaphores(philo, data);
+    unlink_semaphores();
+    //join_threads(philo);
     free(data->pids);
     data->pids = NULL;
+    
 }

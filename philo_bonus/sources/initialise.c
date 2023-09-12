@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:31:58 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/12 01:45:56 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 17:02:18 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void    unlink_semaphores(void)
         write(STDERR_FILENO, "sem_unlink() failed\n", 20);
     if (sem_unlink(SEMA_LAST_MEAL) < 0)
         write(STDERR_FILENO, "sem_unlink() failed\n", 20);
+    if (sem_unlink(SEMA_MONITOR) < 0)
+        write(STDERR_FILENO, "sem_unlink() failed\n", 20);
 }
 
 bool    init_data(t_data *data, char *count)
@@ -32,6 +34,7 @@ bool    init_data(t_data *data, char *count)
         
     data->stop_sim = false;
     data->philos_count = ft_atoi(count);
+    data->sem_monitor = sem_open(SEMA_MONITOR, SEMA_FLAGS, SEMA_MODES, 1);
     data->sem_ate_enough = sem_open(SEMA_MEALS, SEMA_FLAGS, SEMA_MODES, 0);
     data->sem_forks = sem_open(SEMA_FORKS, SEMA_FLAGS, SEMA_MODES, data->philos_count);
     data->sem_state_msg = sem_open(SEMA_STREAM, SEMA_FLAGS, SEMA_MODES, 1);
@@ -44,15 +47,12 @@ bool    init_data(t_data *data, char *count)
 
 bool    init_philo(t_philo *philo, char **args)
 {
-    struct timeval tv;
-    
     sem_unlink(SEMA_LAST_MEAL);
-    gettimeofday(&tv, NULL);
     philo->time_to_die = ft_atoi(args[0]);
     philo->time_to_eat = ft_atoi(args[1]);
     philo->time_to_sleep = ft_atoi(args[2]);
-    philo->meals_count = 0;
-    philo->starting_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+    philo->meals_count = 0; // a modif, pas ok
+    philo->starting_time = 0;
     philo->last_meal_tstamp = 0;
     philo->number_of_times_each_philosopher_must_eat = -1;
     if (args[3])

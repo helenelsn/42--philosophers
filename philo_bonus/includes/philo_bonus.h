@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 01:33:42 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 18:41:11 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define SEMA_STREAM	"/philo_state_display"
 # define SEMA_MEALS		"/philo_meals_count"
 # define SEMA_DEATH 	"/philo_one_died"
+# define SEMA_MONITOR 	"/philo_global_monitor"
 # define SEMA_LAST_MEAL	"/philo_last_meal_timestamp"
 
 
@@ -60,7 +61,7 @@ typedef struct  s_philo
 	unsigned int	meals_count;
 	unsigned long 	starting_time;
 	unsigned long	last_meal_tstamp;
-	sem_t 			*sem_last_meal;
+	sem_t 			*sem_last_meal; // pas utile si n'a pas un thread par philo, qui monitore le philo
 }               t_philo;
 
 typedef struct 	s_data
@@ -71,13 +72,15 @@ typedef struct 	s_data
 	bool 		stop_sim;
 	pid_t 		*pids;
 	sem_t		*sem_forks;
-    sem_t		*sem_state_msg;
+    sem_t		*sem_monitor;
+	sem_t 		*sem_state_msg;
 	sem_t		*sem_ate_enough;
 	sem_t		*sem_one_died;
 	
 }				t_data;
 
 /* initialise */
+void    unlink_semaphores(void);
 bool    init_data(t_data *data, char *count);
 bool    init_philo(t_philo *philo, char **args);
 
@@ -86,6 +89,7 @@ void    self_monitoring(t_philo *philo, t_data *data);
 void    philo_process(t_philo *philo, t_data *data, int i);
 
 /* main monitoring */
+void    create_threads(t_data *data, int args);
 void    *check_meals_routine(void *data_check);
 void    *check_death_routine(void *data_check);
 void    parent_process(t_philo *philo, t_data *data);

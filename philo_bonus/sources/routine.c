@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:24:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 01:53:15 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 19:24:07 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ void    self_monitoring(t_philo *philo, t_data *data)
     sem_wait(philo->sem_last_meal);
     last_meal = philo->last_meal_tstamp;
     sem_post(philo->sem_last_meal);
-    printf("%d : get_current_time = %ld, last meal = %ld, last meal + time_to_die = %ld\n",
-        philo->philo_id + 1, get_current_time(philo), last_meal, last_meal + philo->time_to_die);
+    /*printf("%d : get_current_time = %ld, last meal = %ld, last meal + time_to_die = %ld\n",
+        philo->philo_id + 1, get_current_time(philo), last_meal, last_meal + philo->time_to_die);*/
     
     if (get_current_time(philo) >= last_meal + philo->time_to_die)
     {
         sem_post(data->sem_one_died);
         sem_wait(data->sem_state_msg); // ne sem_post pas apres comme ca plus personne d'autre ne peut écrire
-        printf("%ld %d died\n", get_current_time(philo), philo->philo_id);
+        printf("%ld %d died\n", get_current_time(philo), philo->philo_id + 1);
         exit_philo(philo, data); 
     }
 }
@@ -68,25 +68,41 @@ void    eating_state(t_philo *philo, t_data *data)
 
     print_state(philo, data, eating);
     ft_usleep(philo, data, eating);
-    if (--(philo->meals_count) == 0)
+    
+    if (philo->number_of_times_each_philosopher_must_eat != -1 
+        && ++(philo->meals_count) == philo->number_of_times_each_philosopher_must_eat)
+        {
+        printf("%ld %d ATE ENOUGH\n", get_current_time(philo), philo->philo_id + 1);
         sem_post(data->sem_ate_enough);
+        }
+    /*if (--(philo->meals_count) == 0)
+    {
+        printf("%ld %d ATE ENOUGH\n", get_current_time(philo), philo->philo_id + 1);
+        sem_post(data->sem_ate_enough);
+    }*/
+}
+
+void        set_starting_time(t_philo *philo)
+{
+    struct timeval tv;
+    
+    gettimeofday(&tv, NULL);
+    philo->starting_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
 void    philo_process(t_philo *philo, t_data *data, int i)
 {
     philo->philo_id = i;
-    
-    /* Open preexisting semaphores in child process */
-    /*sem_t *forks = sem_open(SEMA_FORKS, 0);*/ // pas la peine?
    
-//     if (data->philos_count == 1)
-//         (sem_wait(data->sem_forks), print_state(philo, data, got_fork),
-//             usleep(philo->time_to_die * 1000), sem_post(data->sem_one_died), 
-//                 exit_philo(philo, data));
+     if (data->philos_count == 1)
+         (sem_wait(data->sem_forks), print_state(philo, data, got_fork),
+             usleep(philo->time_to_die * 1000), sem_post(data->sem_one_died), 
+                 exit_philo(philo, data));
    
-//    if (philo->number_of_times_each_philosopher_must_eat == 0)
-//         sem_post(data->sem_ate_enough);
+    if (philo->number_of_times_each_philosopher_must_eat == 0)
+         sem_post(data->sem_ate_enough);
 
+    set_starting_time(philo);
     while (true)
     {
         self_monitoring(philo, data);
