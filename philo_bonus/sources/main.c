@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 20:43:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 19:18:32 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 21:09:12 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,9 @@ int main(int argc, char **argv)
     {
         if (pthread_join(data.check_meals, NULL))
             write(STDERR_FILENO, "pthread_join() failed\n", 22);
+        //printf("joined meals monitoring thread\n");
     }
+    //printf("ok ici\n");
     exit_parent(&philo, &data);
     return (0);
 

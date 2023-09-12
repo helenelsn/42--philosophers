@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:23:04 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 19:27:50 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/12 21:14:08 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,11 @@ void    *check_meals_routine(void *data_check)
         printf("incremented sem_ate_enough\n");
         i++;
     }
-    //sem_post(data->sem_one_died); // à vérifier
+    sem_post(data->sem_one_died); // obligé car sinon, s'ils ont tous mangé, le thread check_death ne se finit jamais
+    
     sem_wait(data->sem_monitor);
-    //printf("in check_meals_routine(), modifying stop_sim to true\n");
     data->stop_sim = true;
     sem_post(data->sem_monitor);
-    //sem_wait(data->sem_ate_enough); // ?
     return (NULL);
 }
 
@@ -79,28 +78,29 @@ bool    end_processes(t_data *data)
 
 void    parent_process(t_philo *philo, t_data *data)
 {
-    printf("entered parent_process()\n");
+    //printf("entered parent_process()\n");
     while (end_processes(data) == false)
         usleep(500);
     kill_processes(data);
-    printf("lolilol i m a killer\n");
+    //printf("lolilol i m a killer\n");
     
     /* Wait for children processes */
     int i;
     i = 0;
     while (i < data->philos_count)
     {
-        printf("waiting for process %d\n", i);
+        //printf("waiting for process %d\n", i);
         if (waitpid(data->pids[i], NULL, 0) < 0)
             write(STDERR_FILENO, "waitpid() failed\n", 17);
+        //printf("process %d done\n", i);
         i++;
     }
-    dprintf(2, "apres les gosses\n");
+    //dprintf(2, "apres les gosses\n");
 }
 
 void    create_threads(t_data *data, int args)
 {
-    printf("creating threads\n");
+    //printf("creating threads\n");
     if (pthread_create(&data->check_death, NULL, check_death_routine, (void *)data))
         write(STDERR_FILENO, "pthread_create() failed\n", 24);
     if (args == 5)
