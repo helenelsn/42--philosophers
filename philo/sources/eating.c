@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eating.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:00:23 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/10 21:12:04 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/13 01:31:28 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,17 +92,22 @@ bool    eating_time(t_philo *philo)
 {
     /*bool is_alive;
     is_alive = true;*/
-    
+
     if (take_forks(philo) == false)
         return (NULL);
-    pthread_mutex_lock(&philo->data->msg_display);
-    printf("%ld %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
-    pthread_mutex_unlock(&philo->data->msg_display);
+        
+    print_state(philo, philo->data, got_fork);
     if (end_thread(philo, both))
         return (false);
-    pthread_mutex_lock(&philo->data->msg_display);
-    printf("%ld %d is eating\n", get_current_time(philo->data), philo->philo_id + 1);
-    pthread_mutex_unlock(&philo->data->msg_display);
+    print_state(philo, philo->data, eating);
+    
+    // pthread_mutex_lock(&philo->data->msg_display);
+    // printf("%ld %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
+    // pthread_mutex_unlock(&philo->data->msg_display);
+    
+    // pthread_mutex_lock(&philo->data->msg_display);
+    // printf("%ld %d is eating\n", get_current_time(philo->data), philo->philo_id + 1);
+    // pthread_mutex_unlock(&philo->data->msg_display);
 
     update_last_meal(philo);
     

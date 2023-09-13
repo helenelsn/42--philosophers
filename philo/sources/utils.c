@@ -6,11 +6,31 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/09 18:13:23 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/13 01:16:58 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void    print_state(t_philo *philo, t_data *data, int state)
+{
+    pthread_mutex_lock(&data->msg_display);
+    if (ft_is_end(data))
+    {
+        pthread_mutex_unlock(&data->msg_display);
+        return ;
+    }
+    printf("%ld %d ", get_current_time(data), philo->philo_id + 1);
+    if (state == eating)
+        printf("is eating\n");
+    else if (state == sleeping)
+        printf("is sleeping\n");
+    else if (state == thinking) 
+        printf("is thinking\n");
+    else if (state == got_fork)
+        printf("grabbed a fork\n");
+    pthread_mutex_unlock(&data->msg_display);
+}
 
 long	get_current_time(t_data *data)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/10 18:36:04 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/13 01:13:11 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ enum	e_state
 {
 	eating,
 	sleeping,
-	thinking // useful for the print_action() function
+	thinking, // useful for the print_action() function
+	got_fork
 };
 
 enum	e_fork
@@ -91,6 +92,7 @@ void    free_all(t_data data, t_philo *philos);
 /* utils */
 long	get_current_time(t_data *data);
 void    ft_usleep(t_data *data, int state);
+void    print_state(t_philo *philo, t_data *data, int state);
 int		ft_atoi(const char *nb_str);
 
 #endif

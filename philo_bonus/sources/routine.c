@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:24:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 19:24:07 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/13 01:48:09 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ void    self_monitoring(t_philo *philo, t_data *data)
 void    take_forks(t_philo *philo, t_data *data)
 {
     /*while (data->sem_forks->__align < 2) //check le retour du monitoring en meme temps ?
-        usleep(10);*/
+    {
+        self_monitoring(philo, data);
+        usleep(10);
+    }*/
     sem_wait(data->sem_forks);
     print_state(philo, data, got_fork);
     sem_wait(data->sem_forks);
