@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:24:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 20:52:25 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/14 21:20:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void    take_forks(t_philo *philo, t_data *data, pthread_t *philo_monitor)
     print_state(philo, data, got_fork);
     //printf("between forks %d\n", philo->philo_id + 1);
     sem_wait(data->sem_forks);
-    //printf("got a forks %d\n", philo->philo_id + 1);
     if (sem_open(SEMA_END, 0) != SEM_FAILED)
     {
         drop_forks(philo, data);

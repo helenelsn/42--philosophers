@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 23:21:59 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/14 20:52:45 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/14 21:19:38 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void    *check_for_death(void *arg)
         }
         if (get_current_time(philo_monitor) >= last_meal + philo_monitor->time_to_die)
         {
-            
-            //sem_wait(philo_monitor->data->sem_state_msg);
             philo_monitor->data->sem_end = sem_open(SEMA_END, SEMA_FLAGS, SEMA_MODES, 0);
             sem_wait(philo_monitor->data->sem_state_msg);
             if (sem_open(SEMA_END_MSG, 0) == SEM_FAILED && errno == ENOENT)
@@ -47,6 +45,8 @@ void    *check_for_death(void *arg)
             sem_post(philo_monitor->data->sem_state_msg);
             //printf("%d ok there\n", philo_monitor->philo_id + 1);
             
+            sem_post(philo_monitor->data->sem_forks);
+            //sem_post(philo_monitor->data->sem_forks);
             
             //sem_post(philo_monitor->data->sem_state_msg);
             /* while (i < philo_monitor->data->philos_count)
