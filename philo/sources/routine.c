@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 13:22:20 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/13 01:15:01 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 17:12:21 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,6 @@ bool    sleeping_time(t_philo *philo)
     if (ft_is_end(philo->data))
         return (false);
     print_state(philo, philo->data, sleeping);
-    // pthread_mutex_lock(&philo->data->msg_display);
-    // printf("%ld %d is sleeping\n", get_current_time(philo->data), philo->philo_id + 1);
-    // pthread_mutex_unlock(&philo->data->msg_display);
-    
     ft_usleep(philo->data, sleeping);
     if (ft_is_end(philo->data))
         return (false);
@@ -43,15 +39,6 @@ bool    thinking_time(t_philo *philo)
     if (ft_is_end(philo->data))
         return (false);
     print_state(philo, philo->data, thinking);
-    // pthread_mutex_lock(&philo->data->msg_display);
-    // if (ft_is_end(philo->data))
-    // {
-    //     pthread_mutex_unlock(&philo->data->msg_display);
-    //     return (false);
-    // }
-    // printf("%ld %d is thinking\n", get_current_time(philo->data), philo->philo_id + 1);
-    // pthread_mutex_unlock(&philo->data->msg_display);
-	
 	usleep((philo->data->time_to_die - (philo->data->time_to_eat + philo->data->time_to_sleep)) * 500);
     if (ft_is_end(philo->data))
         return (false);

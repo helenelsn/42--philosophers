@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialise.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:31:58 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/14 02:25:55 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/14 13:28:03 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void    unlink_semaphores(void)
     sem_unlink(SEMA_DEATH);
     sem_unlink(SEMA_LAST_MEAL);
     sem_unlink(SEMA_MONITOR); 
+    sem_unlink(SEMA_END);
 }
 
 void        set_starting_time(t_philo *philo)
@@ -36,6 +37,7 @@ bool    init_data(t_data *data, char *count)
         
     data->stop_sim = false;
     data->philos_count = ft_atoi(count);
+    data->sem_end = NULL; // ou SEM_FAILED ?
     data->sem_monitor = sem_open(SEMA_MONITOR, SEMA_FLAGS, SEMA_MODES, 1);
     data->sem_ate_enough = sem_open(SEMA_MEALS, SEMA_FLAGS, SEMA_MODES, 0);
     data->sem_forks = sem_open(SEMA_FORKS, SEMA_FLAGS, SEMA_MODES, data->philos_count);

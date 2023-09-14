@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/13 01:13:11 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 17:10:13 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,10 @@ void    destroy_mutexes(t_philo *philos, t_data data);
 void    free_all(t_data data, t_philo *philos);
 
 /* utils */
+int		ft_atoi(const char *nb_str);
+bool    valid_input(int args_nb, char **inputs);
 long	get_current_time(t_data *data);
 void    ft_usleep(t_data *data, int state);
 void    print_state(t_philo *philo, t_data *data, int state);
-int		ft_atoi(const char *nb_str);
 
 #endif

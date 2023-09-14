@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_monitoring.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:23:04 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 02:29:34 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/14 17:26:57 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,10 @@ void    *check_meals_routine(void *data_check)
         // printf("incremented sem_ate_enough\n");
         i++;
     }
-    sem_post(data->sem_one_died); // obligé car sinon, s'ils ont tous mangé, le thread check_death ne se finit jamais
-    
-    sem_wait(data->sem_monitor);
-    data->stop_sim = true;
-    sem_post(data->sem_monitor);
+    //sem_post(data->sem_one_died); // obligé car sinon, s'ils ont tous mangé, le thread check_death ne se finit jamais
+    sem_open(SEMA_END, SEMA_FLAGS, SEMA_MODES, 0);
+    usleep(500);
+    //sem_wait(data->sem_state_msg);
     return (NULL);
 }
 
@@ -79,32 +78,29 @@ bool    end_processes(t_data *data)
 
 void    parent_process(t_philo *philo, t_data *data)
 {
-    //printf("entered parent_process()\n");
-    while (end_processes(data) == false)
-        usleep(50);
-    //printf("---------------------------------------------------------------hello from parent \n");
-    kill_processes(data);
-    //printf("lolilol i m a killer\n");
-    
-    /* Wait for children processes */
     int i;
+    // while (end_processes(data) == false)
+    //     usleep(50);
+    // kill_processes(data);
+    
+    while (sem_open(SEMA_END, 0) == SEM_FAILED)
+        usleep(50);
     i = 0;
     while (i < data->philos_count)
     {
         //printf("waiting for process %d\n", i);
         if (waitpid(data->pids[i], NULL, 0) < 0)
             write(STDERR_FILENO, "waitpid() failed\n", 17);
-        //printf("process %d done\n", i);
+        printf("process (philo) %d done\n", i + 1);
         i++;
     }
-    //dprintf(2, "apres les gosses\n");
+    dprintf(2, "apres les gosses\n");
 }
 
 void    create_threads(t_data *data, int args)
 {
-    //printf("creating threads\n");
-    if (pthread_create(&data->check_death, NULL, check_death_routine, (void *)data))
-        write(STDERR_FILENO, "pthread_create() failed\n", 24);
+    // if (pthread_create(&data->check_death, NULL, check_death_routine, (void *)data))
+    //     write(STDERR_FILENO, "pthread_create() failed\n", 24);
     if (args == 5)
     {
         if (pthread_create(&data->check_meals, NULL, check_meals_routine, (void *)data))

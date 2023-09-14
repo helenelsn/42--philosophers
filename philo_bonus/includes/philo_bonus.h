@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 02:26:46 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/14 17:35:46 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define SEMA_DEATH 	"/philo_one_died"
 # define SEMA_MONITOR 	"/philo_global_monitor"
 # define SEMA_LAST_MEAL	"/philo_last_meal_timestamp"
+# define SEMA_END 		"/philo_end_simulation"
 
 
 enum	e_state
@@ -64,6 +65,7 @@ typedef struct 	s_data
 	sem_t 		*sem_state_msg;
 	sem_t		*sem_ate_enough;
 	sem_t		*sem_one_died;
+	sem_t 		*sem_end;
 	
 }				t_data;
 
@@ -88,9 +90,10 @@ bool    init_philo(t_philo *philo, t_data *data, char **args);
 void    unlink_semaphores(void);
 
 /* routine */
+bool    create_philos(t_data *data, t_philo *philo);
+void    philo_process(t_philo *philo, t_data *data, int i);
 void    self_monitoring(t_philo *philo, t_data *data, pthread_t *philo_monitor);
 void    *check_for_death(void *arg);
-void    philo_process(t_philo *philo, t_data *data, int i);
 
 /* main monitoring */
 void    create_threads(t_data *data, int args);
@@ -101,12 +104,14 @@ void    parent_process(t_philo *philo, t_data *data);
 /* destroy */
 void    kill_processes(t_data *data);
 void    exit_philo(t_philo *philo, t_data *data, pthread_t *philo_monitor);
+void 	join_main_threads(t_data *data, int args_nb);
 void    exit_parent(t_philo *philo, t_data *data);
 
 /* utils */
-long	get_current_time(t_philo *philo);
-void    ft_usleep(t_philo *philo, t_data *data, int state) ;
+bool    valid_input(int args_nb, char **inputs);
 int		ft_atoi(const char *nb_str);
+long	get_current_time(t_philo *philo);
+void    ft_usleep(t_philo *philo, t_data *data, int state, pthread_t *philo_monitor) ;
 void    print_state(t_philo *philo, t_data *data, int state);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eating.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:00:23 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/13 21:21:32 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/14 17:16:51 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,32 +90,17 @@ void    drop_forks(t_philo *philo)
 
 bool    eating_time(t_philo *philo)
 {
-    /*bool is_alive;
-    is_alive = true;*/
-
     if (take_forks(philo) == false)
         return (NULL);
-        
     print_state(philo, philo->data, got_fork);
     if (end_thread(philo, both))
         return (false);
     print_state(philo, philo->data, eating);
-    
-    // pthread_mutex_lock(&philo->data->msg_display);
-    // printf("%ld %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
-    // pthread_mutex_unlock(&philo->data->msg_display);
-    
-    // pthread_mutex_lock(&philo->data->msg_display);
-    // printf("%ld %d is eating\n", get_current_time(philo->data), philo->philo_id + 1);
-    // pthread_mutex_unlock(&philo->data->msg_display);
-
     update_last_meal(philo);
-    
     if (end_thread(philo, both))
         return (false);
     ft_usleep(philo->data, eating);
     drop_forks(philo);
-    
     if (ft_is_end(philo->data))
         return (false);
     pthread_mutex_lock(&philo->meals_count_m);

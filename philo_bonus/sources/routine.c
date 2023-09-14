@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:24:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 02:00:50 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/14 17:37:33 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
-void    sleeping_state(t_philo *philo, t_data *data)
+void    sleeping_state(t_philo *philo, t_data *data, pthread_t *philo_monitor)
 {
     print_state(philo, data, sleeping);
-    usleep(philo->time_to_sleep * 1000);
-    //ft_usleep(philo, data, sleeping);
+    //usleep(philo->time_to_sleep * 1000);
+    ft_usleep(philo, data, sleeping, philo_monitor);
 }
 
-void    thinking_state(t_philo *philo, t_data *data)
+void    thinking_state(t_philo *philo, t_data *data, pthread_t *philo_monitor)
 {
     usleep(500);
     print_state(philo, data, thinking);
-    usleep((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep) * 500);
-    //ft_usleep(philo, data, thinking);
+    //usleep((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep) * 500);
+    ft_usleep(philo, data, thinking, philo_monitor);
     /* while (data->sem_forks->__align < 2) //check le retour du monitoring en meme temps ?
     {
         self_monitoring(philo, data);
@@ -49,11 +49,22 @@ void    thinking_state(t_philo *philo, t_data *data)
     }
 } */
 
-void    take_forks(t_philo *philo, t_data *data)
+void    take_forks(t_philo *philo, t_data *data, pthread_t *philo_monitor)
 {
     sem_wait(data->sem_forks);
+    if (sem_open(SEMA_END, 0) != SEM_FAILED)
+    {
+        printf("philo %d died while waiting fot a fork, about to exit\n", philo->philo_id + 1);
+        exit_philo(philo, data, philo_monitor);
+    }
     print_state(philo, data, got_fork);
+    
     sem_wait(data->sem_forks);
+    if (sem_open(SEMA_END, 0) != SEM_FAILED)
+    {
+        printf("philo %d died while waiting fot a fork, about to exit\n", philo->philo_id + 1);
+        exit_philo(philo, data, philo_monitor);
+    }
     print_state(philo, data, got_fork);
 }
 
@@ -63,7 +74,7 @@ void    drop_forks(t_philo *philo, t_data *data)
     sem_post(data->sem_forks);
 }
 
-void    eating_state(t_philo *philo, t_data *data)
+void    eating_state(t_philo *philo, t_data *data, pthread_t *philo_monitor)
 {
     /* update last meal timestamp */
     sem_wait(philo->sem_last_meal);
@@ -71,8 +82,8 @@ void    eating_state(t_philo *philo, t_data *data)
     sem_post(philo->sem_last_meal);
 
     print_state(philo, data, eating);
-    usleep(philo->time_to_eat * 1000);
-    //ft_usleep(philo, data, eating);
+    //usleep(philo->time_to_eat * 1000);
+    ft_usleep(philo, data, eating, philo_monitor);
     
     if (philo->number_of_times_each_philosopher_must_eat != -1 
         && ++(philo->meals_count) == philo->number_of_times_each_philosopher_must_eat)
@@ -86,8 +97,8 @@ void    philo_process(t_philo *philo, t_data *data, int i)
     philo->philo_id = i;
     if (pthread_create(&monitoring_thread, NULL, check_for_death, (void *)philo))
         write(STDERR_FILENO, "pthread_create() failed\n", 24);
-    if (pthread_detach(monitoring_thread))
-        write(STDERR_FILENO, "pthread_detach() failed\n", 24);
+    // if (pthread_detach(monitoring_thread))
+    //     write(STDERR_FILENO, "pthread_detach() failed\n", 24);
     
      if (data->philos_count == 1)
          (sem_wait(data->sem_forks), print_state(philo, data, got_fork),
@@ -99,19 +110,57 @@ void    philo_process(t_philo *philo, t_data *data, int i)
 
     while (true)
     {
+        take_forks(philo, data, &monitoring_thread);
+        if (sem_open(SEMA_END, 0) != SEM_FAILED)
+            exit_philo(philo, data, &monitoring_thread);
         //self_monitoring(philo, data);
-        take_forks(philo, data);
-        //self_monitoring(philo, data);
-        eating_state(philo, data);
+        
+        eating_state(philo, data, &monitoring_thread);
+        if (sem_open(SEMA_END, 0) != SEM_FAILED)
+            exit_philo(philo, data, &monitoring_thread);
         //self_monitoring(philo, data);
         drop_forks(philo, data);
 
         //printf("%d ok ici\n", philo->philo_id + 1);
         //self_monitoring(philo, data);
-        sleeping_state(philo, data);
+        if (sem_open(SEMA_END, 0) != SEM_FAILED)
+            exit_philo(philo, data, &monitoring_thread);
+        sleeping_state(philo, data, &monitoring_thread);
 
         //self_monitoring(philo, data);
-        thinking_state(philo, data);
+        if (sem_open(SEMA_END, 0) != SEM_FAILED)
+            exit_philo(philo, data, &monitoring_thread);
+        thinking_state(philo, data, &monitoring_thread);
     }
     // exit_philo(philo, data, &monitoring_thread);
+}
+
+/* Create child processes, ie philosophers */
+bool    create_philos(t_data *data, t_philo *philo)
+{
+    int	i;
+
+	i = 0;
+	set_starting_time(philo);
+    while (i < data->philos_count)
+    {
+        data->pids[i] = fork();
+        if (data->pids[i] < 0)
+        {
+            while (--i)
+                waitpid(data->pids[i], NULL, 0);
+            free(data->pids);
+            return (false);
+        }
+        if (data->pids[i] == 0)
+        {
+            free(data->pids);
+            data->pids = NULL;
+            if (i % 2)
+                usleep(philo->time_to_eat * 500);
+            philo_process(philo, data, i);
+        }
+        i++;
+    }
+    return (true);
 }

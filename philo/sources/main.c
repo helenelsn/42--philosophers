@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/09 13:29:23 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 17:22:10 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,9 @@ int main(int argc, char **argv)
     t_data          data;
     t_philo         *philos;
 
-    if (argc < 5 || argc > 6)
-    {
-        printf("This program requires between 4 and 5 arguments!\n");
-        printf("Example : ./philo 7 1500 300 200\n");
+    if (!valid_input(argc - 1, argv + 1))
         return (1);
-    }
-    /* Initialise mutexes */
     init_data(argv + 1, &data);
-    /* Create threads */
     philos = (t_philo *)malloc(sizeof(t_philo) * data.philos_count);
     if (!philos)
         return (2);
