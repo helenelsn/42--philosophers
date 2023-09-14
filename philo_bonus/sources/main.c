@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 20:43:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 21:09:12 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 02:27:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@
     free(msg);
 }*/
 
+bool valid_input(int args_nb, char **args)
+{
+    
+    return (true);
+}
+
 int main(int argc, char **argv)
 {
     t_philo philo;
@@ -34,8 +40,14 @@ int main(int argc, char **argv)
         printf("Example : ./philo 7 1500 300 200\n");
         return (1);
     }
+    if (!valid_input(argc - 1, argv + 1))
+    {
+        printf("This program requires numeric and non-negative arguments!\n"); // a ecrire sur stderr
+        printf("Example : ./philo 7 1500 300 200\n");
+        return (1);
+    }
     wstatus = 0;
-    if (init_philo(&philo, argv + 2) == false || init_data(&data, argv[1]) == false)
+    if (init_philo(&philo, &data, argv + 2) == false || init_data(&data, argv[1]) == false)
         return (1);
     // if (init_data(&data, argv[1]) == false)
     //     return (2);
@@ -46,6 +58,7 @@ int main(int argc, char **argv)
 
     /* Create child processes, ie philosophers */
     i = 0;
+    set_starting_time(&philo);
     while (i < data.philos_count)
     {
         //dprintf(2, "i = %d\n", i);
@@ -54,6 +67,8 @@ int main(int argc, char **argv)
             return (3);
         if (data.pids[i] == 0)
         {
+            free(data.pids);
+            data.pids = NULL;
             if (i % 2)
                 usleep(philo.time_to_eat * 500);
             philo_process(&philo, &data, i);

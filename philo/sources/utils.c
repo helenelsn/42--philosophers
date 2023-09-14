@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/13 01:16:58 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/13 21:36:38 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void    print_state(t_philo *philo, t_data *data, int state)
     else if (state == thinking) 
         printf("is thinking\n");
     else if (state == got_fork)
-        printf("grabbed a fork\n");
+        printf("has taken a fork\n");
     pthread_mutex_unlock(&data->msg_display);
 }
 

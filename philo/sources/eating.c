@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eating.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:00:23 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/13 01:31:28 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/13 21:21:32 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool    take_forks(t_philo *philo)
         if (end_thread(philo, right))
             return (false);
         pthread_mutex_lock(&philo->data->msg_display);
-        printf("%ld %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
+        printf("%ld %d has taken a fork\n", get_current_time(philo->data), philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
         pthread_mutex_lock(get_fork(philo, left));
     }
@@ -65,7 +65,7 @@ bool    take_forks(t_philo *philo)
         if (end_thread(philo, left))
             return (false);
         pthread_mutex_lock(&philo->data->msg_display);
-        printf("%ld %d grabbed a fork\n", get_current_time(philo->data), philo->philo_id + 1);
+        printf("%ld %d has taken a fork\n", get_current_time(philo->data), philo->philo_id + 1);
         pthread_mutex_unlock(&philo->data->msg_display);
         pthread_mutex_lock(get_fork(philo, right));
     }

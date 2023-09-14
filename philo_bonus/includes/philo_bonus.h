@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 18:41:11 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 02:26:46 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define SEMA_MODES		S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
 # define SEMA_FLAGS		O_CREAT //| O_EXCL
 # define SEMA_FORKS 	"/philo_forks"
+# define SEMA_ONLY_ONE	"/philo_one_at_a_time"
 # define SEMA_STREAM	"/philo_state_display"
 # define SEMA_MEALS		"/philo_meals_count"
 # define SEMA_DEATH 	"/philo_one_died"
@@ -51,19 +52,6 @@ enum 	e_forks
 	both 
 };
 
-typedef struct  s_philo
-{
-	int				philo_id; // de 0 à [philos_count - 1]
-	long			time_to_die;
-	long			time_to_eat;
-	long			time_to_sleep;
-	long 			number_of_times_each_philosopher_must_eat;
-	unsigned int	meals_count;
-	unsigned long 	starting_time;
-	unsigned long	last_meal_tstamp;
-	sem_t 			*sem_last_meal; // pas utile si n'a pas un thread par philo, qui monitore le philo
-}               t_philo;
-
 typedef struct 	s_data
 {
 	pthread_t	check_death;
@@ -79,13 +67,29 @@ typedef struct 	s_data
 	
 }				t_data;
 
+typedef struct  s_philo
+{
+	int				philo_id; // de 0 à [philos_count - 1]
+	long			time_to_die;
+	long			time_to_eat;
+	long			time_to_sleep;
+	long 			number_of_times_each_philosopher_must_eat;
+	unsigned int	meals_count;
+	unsigned long 	starting_time;
+	unsigned long	last_meal_tstamp;
+	sem_t 			*sem_last_meal; // pas utile si n'a pas un thread par philo, qui monitore le philo
+	t_data 			*data;
+}               t_philo;
+
 /* initialise */
-void    unlink_semaphores(void);
+void    set_starting_time(t_philo *philo);
 bool    init_data(t_data *data, char *count);
-bool    init_philo(t_philo *philo, char **args);
+bool    init_philo(t_philo *philo, t_data *data, char **args);
+void    unlink_semaphores(void);
 
 /* routine */
-void    self_monitoring(t_philo *philo, t_data *data);
+void    self_monitoring(t_philo *philo, t_data *data, pthread_t *philo_monitor);
+void    *check_for_death(void *arg);
 void    philo_process(t_philo *philo, t_data *data, int i);
 
 /* main monitoring */
@@ -96,7 +100,7 @@ void    parent_process(t_philo *philo, t_data *data);
 
 /* destroy */
 void    kill_processes(t_data *data);
-void    exit_philo(t_philo *philo, t_data *data);
+void    exit_philo(t_philo *philo, t_data *data, pthread_t *philo_monitor);
 void    exit_parent(t_philo *philo, t_data *data);
 
 /* utils */

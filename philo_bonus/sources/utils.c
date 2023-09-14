@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/12 14:54:10 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 00:38:32 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,11 @@ void    ft_usleep(t_philo *philo, t_data *data, int state)
         state_length = get_current_time(philo) + philo->time_to_sleep;
     else if (state == thinking)
         state_length = get_current_time(philo) + ((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep) / 2);
-    while (get_current_time(philo) < state_length)
+    
+    usleep(state_length * 1000);
+    /* while (get_current_time(philo) < state_length)
     {
         self_monitoring(philo, data);
         usleep(100);
-    }
+    } */
 }

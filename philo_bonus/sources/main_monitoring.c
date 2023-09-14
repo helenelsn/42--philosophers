@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_monitoring.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:23:04 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/13 02:02:58 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 02:29:34 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void    *check_death_routine(void *data_check)
     i = 0;
     data = (t_data *)data_check;
     sem_wait(data->sem_one_died);
+    //printf("---------------------------------------------------------------hello\n from check death");
     /*while (i < data->philos_count)
     {
         sem_post(data->sem_ate_enough);
@@ -41,7 +42,7 @@ void    *check_meals_routine(void *data_check)
     while (i < data->philos_count)
     {
         sem_wait(data->sem_ate_enough);
-        printf("incremented sem_ate_enough\n");
+        // printf("incremented sem_ate_enough\n");
         i++;
     }
     sem_post(data->sem_one_died); // obligé car sinon, s'ils ont tous mangé, le thread check_death ne se finit jamais
@@ -80,7 +81,8 @@ void    parent_process(t_philo *philo, t_data *data)
 {
     //printf("entered parent_process()\n");
     while (end_processes(data) == false)
-        usleep(500);
+        usleep(50);
+    //printf("---------------------------------------------------------------hello from parent \n");
     kill_processes(data);
     //printf("lolilol i m a killer\n");
     

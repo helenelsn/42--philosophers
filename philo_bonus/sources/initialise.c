@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialise.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:31:58 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/12 17:02:18 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 02:25:55 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,20 @@
 
 void    unlink_semaphores(void)
 {
-    if (sem_unlink(SEMA_FORKS) < 0)
-        write(STDERR_FILENO, "sem_unlink() failed\n", 20);
-    if (sem_unlink(SEMA_STREAM) < 0)
-        write(STDERR_FILENO, "sem_unlink() failed\n", 20);
-    if (sem_unlink(SEMA_MEALS) < 0)
-        write(STDERR_FILENO, "sem_unlink() failed\n", 20);
-    if (sem_unlink(SEMA_DEATH) < 0)
-        write(STDERR_FILENO, "sem_unlink() failed\n", 20);
-    if (sem_unlink(SEMA_LAST_MEAL) < 0)
-        write(STDERR_FILENO, "sem_unlink() failed\n", 20);
-    if (sem_unlink(SEMA_MONITOR) < 0)
-        write(STDERR_FILENO, "sem_unlink() failed\n", 20);
+    sem_unlink(SEMA_FORKS);
+    sem_unlink(SEMA_STREAM);
+    sem_unlink(SEMA_MEALS);
+    sem_unlink(SEMA_DEATH);
+    sem_unlink(SEMA_LAST_MEAL);
+    sem_unlink(SEMA_MONITOR); 
+}
+
+void        set_starting_time(t_philo *philo)
+{
+    struct timeval tv;
+    
+    gettimeofday(&tv, NULL);
+    philo->starting_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 
 bool    init_data(t_data *data, char *count)
@@ -45,7 +47,7 @@ bool    init_data(t_data *data, char *count)
     return (true);
 }
 
-bool    init_philo(t_philo *philo, char **args)
+bool    init_philo(t_philo *philo, t_data *data, char **args)
 {
     sem_unlink(SEMA_LAST_MEAL);
     philo->time_to_die = ft_atoi(args[0]);
@@ -54,6 +56,7 @@ bool    init_philo(t_philo *philo, char **args)
     philo->meals_count = 0; // a modif, pas ok
     philo->starting_time = 0;
     philo->last_meal_tstamp = 0;
+    philo->data = data;
     philo->number_of_times_each_philosopher_must_eat = -1;
     if (args[3])
         philo->number_of_times_each_philosopher_must_eat = ft_atoi(args[3]);

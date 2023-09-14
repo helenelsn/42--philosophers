@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   destroy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:42:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/12 19:01:47 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 02:00:47 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,16 @@ void    close_semaphores(t_philo *philo, t_data *data)
     sem_close(data->sem_forks);
     sem_close(data->sem_one_died);
     sem_close(data->sem_state_msg);
+    sem_close(data->sem_monitor);
     sem_close(philo->sem_last_meal);
 }
 
-void    exit_philo(t_philo *philo, t_data *data)
+void    exit_philo(t_philo *philo, t_data *data, pthread_t *philo_monitor)
 {
+    //pthread_join(philo_monitor, NULL);
+    
     close_semaphores(philo, data);
     unlink_semaphores();
-    free(data->pids);
-    data->pids = NULL;
     exit(1); 
 }
 
