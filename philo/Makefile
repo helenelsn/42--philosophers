@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
+#    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:38:24 by Helene            #+#    #+#              #
-#    Updated: 2023/09/11 17:42:30 by Helene           ###   ########.fr        #
+#    Updated: 2023/09/14 23:47:58 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,12 @@ INC_DIR = ./includes/
 
 SRC_DIR = ./sources/
 SRC = 	main.c \
+		initialise.c \
+		parsing.c \
 		routine.c \
 		eating.c \
+		eating_utils.c \
 		monitoring.c \
-		initialise.c \
 		destroy.c \
 		ft_atoi.c \
 		utils.c

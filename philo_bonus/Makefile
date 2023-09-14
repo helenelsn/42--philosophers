@@ -6,7 +6,7 @@
 #    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:42:20 by Helene            #+#    #+#              #
-#    Updated: 2023/09/13 23:50:22 by hlesny           ###   ########.fr        #
+#    Updated: 2023/09/14 23:47:46 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ INC_DIR = ./includes/
 SRC_DIR = ./sources/
 SRC = 	main.c \
 		initialise.c \
+		parsing.c \
 		main_monitoring.c \
 		routine.c \
 		death_while_waiting.c \
