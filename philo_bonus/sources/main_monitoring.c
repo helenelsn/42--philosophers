@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_monitoring.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:23:04 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 17:26:57 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 20:12:36 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,10 @@ void    parent_process(t_philo *philo, t_data *data)
         //printf("waiting for process %d\n", i);
         if (waitpid(data->pids[i], NULL, 0) < 0)
             write(STDERR_FILENO, "waitpid() failed\n", 17);
-        printf("process (philo) %d done\n", i + 1);
+        //printf("process (philo) %d done\n", i + 1);
         i++;
     }
-    dprintf(2, "apres les gosses\n");
+    //dprintf(2, "apres les gosses\n");
 }
 
 void    create_threads(t_data *data, int args)

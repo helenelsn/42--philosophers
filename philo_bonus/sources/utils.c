@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 17:20:33 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 20:11:56 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,15 @@ bool    valid_input(int args_nb, char **inputs)
 
 void    print_state(t_philo *philo, t_data *data, int state)
 {
+    // if (sem_open(SEMA_END, 0) != SEM_FAILED)    
+    //     return;
     sem_wait(data->sem_state_msg);
-    printf("%ld %d ", get_current_time(philo), philo->philo_id + 1);
+    if (sem_open(SEMA_END, 0) != SEM_FAILED)    
+    {
+        sem_post(data->sem_state_msg);
+        return;
+    }
+     printf("%ld %d ", get_current_time(philo), philo->philo_id + 1);
     if (state == eating)
         printf("is eating\n");
     else if (state == sleeping)
@@ -84,7 +91,7 @@ void    ft_usleep(t_philo *philo, t_data *data, int state, pthread_t *philo_moni
     {
         if (sem_open(SEMA_END, 0) != SEM_FAILED)
         {
-            printf("%ld ---------------------- philo %d in ft_usleep, about to exit in state %d\n", get_current_time(philo), philo->philo_id + 1, state);
+            //printf("%ld ---------------------- philo %d in ft_usleep, about to exit in state %d\n", get_current_time(philo), philo->philo_id + 1, state);
             exit_philo(philo, data, philo_monitor);
         }
         usleep(5);

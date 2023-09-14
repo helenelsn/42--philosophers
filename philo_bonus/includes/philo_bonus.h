@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 17:35:46 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 20:36:55 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,20 @@
 # define SEMA_MODES		S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
 # define SEMA_FLAGS		O_CREAT //| O_EXCL
 # define SEMA_FORKS 	"/philo_forks"
-# define SEMA_ONLY_ONE	"/philo_one_at_a_time"
-# define SEMA_STREAM	"/philo_state_display"
+# define SEMA_STREAM	"/philo_state_display" // pas utile
 # define SEMA_MEALS		"/philo_meals_count"
 # define SEMA_DEATH 	"/philo_one_died"
-# define SEMA_MONITOR 	"/philo_global_monitor"
+# define SEMA_MONITOR 	"/philo_global_monitor" // pas utile
 # define SEMA_LAST_MEAL	"/philo_last_meal_timestamp"
 # define SEMA_END 		"/philo_end_simulation"
+# define SEMA_END_MSG	"/philo_death_message"
 
 
 enum	e_state
 {
 	eating,
 	sleeping,
-	thinking, // useful for the print_action() function
+	thinking,
 	got_fork
 };
 
@@ -61,11 +61,12 @@ typedef struct 	s_data
 	bool 		stop_sim;
 	pid_t 		*pids;
 	sem_t		*sem_forks;
-    sem_t		*sem_monitor;
-	sem_t 		*sem_state_msg;
+    sem_t		*sem_monitor; // useless
+	sem_t 		*sem_state_msg; // useless
 	sem_t		*sem_ate_enough;
 	sem_t		*sem_one_died;
 	sem_t 		*sem_end;
+	sem_t 		*sem_end_msg;
 	
 }				t_data;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:24:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 17:37:33 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/14 20:52:25 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,31 @@ void    thinking_state(t_philo *philo, t_data *data, pthread_t *philo_monitor)
     }
 } */
 
+void    drop_forks(t_philo *philo, t_data *data)
+{
+    sem_post(data->sem_forks);
+    sem_post(data->sem_forks);
+}
+
 void    take_forks(t_philo *philo, t_data *data, pthread_t *philo_monitor)
 {
     sem_wait(data->sem_forks);
     if (sem_open(SEMA_END, 0) != SEM_FAILED)
     {
-        printf("philo %d died while waiting fot a fork, about to exit\n", philo->philo_id + 1);
+        sem_post(data->sem_forks);
         exit_philo(philo, data, philo_monitor);
     }
     print_state(philo, data, got_fork);
-    
+    //printf("between forks %d\n", philo->philo_id + 1);
     sem_wait(data->sem_forks);
+    //printf("got a forks %d\n", philo->philo_id + 1);
     if (sem_open(SEMA_END, 0) != SEM_FAILED)
     {
-        printf("philo %d died while waiting fot a fork, about to exit\n", philo->philo_id + 1);
+        drop_forks(philo, data);
         exit_philo(philo, data, philo_monitor);
     }
+    //printf("end of take forks %d\n", philo->philo_id + 1);
     print_state(philo, data, got_fork);
-}
-
-void    drop_forks(t_philo *philo, t_data *data)
-{
-    sem_post(data->sem_forks);
-    sem_post(data->sem_forks);
 }
 
 void    eating_state(t_philo *philo, t_data *data, pthread_t *philo_monitor)
@@ -108,31 +110,61 @@ void    philo_process(t_philo *philo, t_data *data, int i)
     if (philo->number_of_times_each_philosopher_must_eat == 0)
          sem_post(data->sem_ate_enough);
 
-    while (true)
+    while (sem_open(SEMA_END, 0) == SEM_FAILED)
     {
         take_forks(philo, data, &monitoring_thread);
         if (sem_open(SEMA_END, 0) != SEM_FAILED)
+        {
+            //printf("hey from ---%d\n", philo->philo_id+1);
             exit_philo(philo, data, &monitoring_thread);
+
+        }
         //self_monitoring(philo, data);
         
         eating_state(philo, data, &monitoring_thread);
         if (sem_open(SEMA_END, 0) != SEM_FAILED)
+        {
+            //printf("hey from ---%d\n", philo->philo_id+1);
             exit_philo(philo, data, &monitoring_thread);
+
+        }
+        // if (sem_open(SEMA_END, 0) != SEM_FAILED)
+        //     exit_philo(philo, data, &monitoring_thread);
         //self_monitoring(philo, data);
         drop_forks(philo, data);
+        if (sem_open(SEMA_END, 0) != SEM_FAILED)
+        {
+            //printf("hey from ---%d\n", philo->philo_id+1);
+            exit_philo(philo, data, &monitoring_thread);
+
+        }
 
         //printf("%d ok ici\n", philo->philo_id + 1);
         //self_monitoring(philo, data);
-        if (sem_open(SEMA_END, 0) != SEM_FAILED)
-            exit_philo(philo, data, &monitoring_thread);
+        // if (sem_open(SEMA_END, 0) != SEM_FAILED)
+        //     exit_philo(philo, data, &monitoring_thread);
         sleeping_state(philo, data, &monitoring_thread);
+        if (sem_open(SEMA_END, 0) != SEM_FAILED)
+        {
+            //printf("hey from ---%d\n", philo->philo_id+1);
+            exit_philo(philo, data, &monitoring_thread);
+
+        }
 
         //self_monitoring(philo, data);
-        if (sem_open(SEMA_END, 0) != SEM_FAILED)
-            exit_philo(philo, data, &monitoring_thread);
+        // if (sem_open(SEMA_END, 0) != SEM_FAILED)
+        //     exit_philo(philo, data, &monitoring_thread);
         thinking_state(philo, data, &monitoring_thread);
+        if (sem_open(SEMA_END, 0) != SEM_FAILED)
+        {
+            //printf("hey from ---%d\n", philo->philo_id+1);
+            exit_philo(philo, data, &monitoring_thread);
+
+        }
     }
-    // exit_philo(philo, data, &monitoring_thread);
+    //printf("endofroutine\n");
+    pthread_join(monitoring_thread, NULL);
+    exit_philo(philo, data, &monitoring_thread);
 }
 
 /* Create child processes, ie philosophers */
