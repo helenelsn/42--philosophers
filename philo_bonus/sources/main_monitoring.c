@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:23:04 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 21:54:51 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/18 21:21:28 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,11 @@ void	parent_process(t_philo *philo, t_data *data)
 {
 	int	i;
 
-	while (sem_open(SEMA_END, 0) == SEM_FAILED)
-		usleep(50);
+	while (exit_main_process(data) == false)
+		usleep(100);
+	/* while (sem_open(SEMA_END, 0) == SEM_FAILED)
+		usleep(50); */
+	printf("ok ici\n");
 	i = 0;
 	while (i < data->philos_count)
 	{

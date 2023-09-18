@@ -6,7 +6,7 @@
 #    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:42:20 by Helene            #+#    #+#              #
-#    Updated: 2023/09/14 23:47:46 by hlesny           ###   ########.fr        #
+#    Updated: 2023/09/18 16:23:49 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,9 @@ SRC = 	main.c \
 		death_while_waiting.c \
 		destroy.c \
 		utils.c \
-		ft_atoi.c 
+		sem_death_protection.c \
+		ft_atoi.c \
+		ft_itoa.c 
 
 OBJ_DIR = ./objects/
 OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

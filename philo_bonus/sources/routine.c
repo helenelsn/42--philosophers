@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:24:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 23:50:45 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/18 20:31:28 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ void	drop_forks(t_philo *philo, t_data *data)
 void	take_forks(t_philo *philo, t_data *data, pthread_t *philo_monitor)
 {
 	sem_wait(data->sem_forks);
-	if (sem_open(SEMA_END, 0) != SEM_FAILED)
+	if (sem_open(ft_itoa(-(philo->philo_id + 1)), 0) != SEM_FAILED)
 	{
 		sem_post(data->sem_forks);
 		exit_philo(philo, data, philo_monitor);
 	}
 	print_state(philo, data, got_fork);
 	sem_wait(data->sem_forks);
-	if (sem_open(SEMA_END, 0) != SEM_FAILED)
+	if (sem_open(ft_itoa(-(philo->philo_id + 1)), 0) != SEM_FAILED)
 	{
 		drop_forks(philo, data);
 		exit_philo(philo, data, philo_monitor);
@@ -70,29 +70,37 @@ void	philo_process(t_philo *philo, t_data *data, int i)
 	if (pthread_create(&monitoring_thread, NULL, check_for_death,
 			(void *)philo))
 		write(STDERR_FILENO, "pthread_create() failed\n", 24);
+
+	/* modifier */
 	if (data->philos_count == 1)
 		(sem_wait(data->sem_forks), print_state(philo, data, got_fork),
-			usleep(philo->time_to_die * 1000), sem_post(data->sem_one_died),
+			usleep(philo->time_to_die * 1000),
 			exit_philo(philo, data, &monitoring_thread));
+
 	if (philo->number_of_times_each_philosopher_must_eat == 0)
 		sem_post(data->sem_ate_enough);
 	while (sem_open(SEMA_END, 0) == SEM_FAILED)
 	{
 		take_forks(philo, data, &monitoring_thread);
-		if (sem_open(SEMA_END, 0) != SEM_FAILED)
+		/* if (sem_open(SEMA_END, 0) != SEM_FAILED) */
+		if (check_create_state(data, philo->philo_id))
 			(drop_forks(philo, data), exit_philo(philo, data,
 					&monitoring_thread));
 		eating_state(philo, data, &monitoring_thread);
-		if (sem_open(SEMA_END, 0) != SEM_FAILED)
+		/* if (sem_open(SEMA_END, 0) != SEM_FAILED) */
+		if (check_create_state(data, philo->philo_id))
 			exit_philo(philo, data, &monitoring_thread);
 		drop_forks(philo, data);
-		if (sem_open(SEMA_END, 0) != SEM_FAILED)
+		/* if (sem_open(SEMA_END, 0) != SEM_FAILED) */
+		if (check_create_state(data, philo->philo_id))
 			exit_philo(philo, data, &monitoring_thread);
 		sleeping_state(philo, data, &monitoring_thread);
-		if (sem_open(SEMA_END, 0) != SEM_FAILED)
+		/* if (sem_open(SEMA_END, 0) != SEM_FAILED) */
+		if (check_create_state(data, philo->philo_id))
 			exit_philo(philo, data, &monitoring_thread);
 		thinking_state(philo, data, &monitoring_thread);
-		if (sem_open(SEMA_END, 0) != SEM_FAILED)
+		/* if (sem_open(SEMA_END, 0) != SEM_FAILED) */
+		if (check_create_state(data, philo->philo_id))
 			exit_philo(philo, data, &monitoring_thread);
 	}
 	pthread_join(monitoring_thread, NULL);
