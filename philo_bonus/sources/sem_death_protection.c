@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sem_death_protection.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:16:13 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/18 21:25:13 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/19 23:17:54 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ bool    check_create_state(t_data *data, int n)
     if (sem_open(ft_itoa(-((n + 1))), 0) == SEM_FAILED)
         state = false;
     sem_post(data->sem_create_check[n]);
-    if (state == true)
-        printf("philo %d, on arrete ici\n", n + 1);
+    // if (state == true)
+    //     printf("philo %d, on arrete ici\n", n + 1);
     return (state);
 }
 
@@ -61,14 +61,9 @@ bool    exit_main_process(t_data *data)
     i = 0;
     while (i < data->philos_count)
     {
-        sem_wait(data->sem_create_check[i]);
-        if (sem_open(ft_itoa(i), 0) == SEM_FAILED)
-        {
-            sem_post(data->sem_create_check[i]);
+        if (check_create_state(data, i) == false)
             return (false);
-        }
         i++;   
     }
-    sem_post(data->sem_create_check[i]);
     return (true);
 }

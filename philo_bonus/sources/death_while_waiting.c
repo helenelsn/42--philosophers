@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   death_while_waiting.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 23:21:59 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/18 21:26:21 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/19 23:08:25 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	*check_for_death(void *arg)
 		if (get_current_time(philo_monitor) >= last_meal
 			+ philo_monitor->time_to_die)
 		{
+			printf("philo %d is in end_simulation()\n", philo_monitor->philo_id + 1);
 			/* end_simulation */
 			end_simulation(philo_monitor->data);
 			
@@ -50,6 +51,8 @@ void	*check_for_death(void *arg)
 			}
 			sem_post(philo_monitor->data->sem_state_msg);
 			sem_post(philo_monitor->data->sem_forks);
+			sem_post(philo_monitor->data->sem_forks);
+			printf("philo %d about to exit the end_simulation \'if\'\n", philo_monitor->philo_id + 1);
 			return (NULL);
 		}
 		usleep(50);

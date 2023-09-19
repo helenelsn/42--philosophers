@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/18 16:10:48 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/19 23:00:21 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	ft_usleep(t_philo *philo, t_data *data, int state,
 					- philo->time_to_eat - philo->time_to_sleep) / 2);
 	while (get_current_time(philo) < state_length)
 	{
-		if (sem_open(SEMA_END, 0) != SEM_FAILED)
+		if (check_create_state(data, philo->philo_id))
 			exit_philo(philo, data, philo_monitor);
 		usleep(5);
 	}

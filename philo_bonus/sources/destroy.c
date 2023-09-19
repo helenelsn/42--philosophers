@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   destroy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:42:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/18 21:09:12 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/19 23:11:33 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	exit_philo(t_philo *philo, t_data *data, pthread_t *philo_monitor)
 	close_semaphores(philo, data);
 	free(data->sem_create);
 	free(data->sem_create_check);
+	printf("philo %d in exit_philo()\n", philo->philo_id + 1);
 	exit(1);
 }
 
