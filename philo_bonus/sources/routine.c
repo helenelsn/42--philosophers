@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:24:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/19 23:10:43 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/20 16:00:55 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void    take_forks(t_philo *philo, t_data *data, pthread_t *philo_monitor)
     sem_wait(data->sem_forks);
     if (check_create_state(data, philo->philo_id))
     {
-        printf("philo %d died while waiting fot a fork, about to exit\n", philo->philo_id + 1);
+        //printf("philo %d died while waiting fot a fork, about to exit\n", philo->philo_id + 1);
         sem_post(data->sem_forks);
         exit_philo(philo, data, philo_monitor);
     }
@@ -69,7 +69,7 @@ void    take_forks(t_philo *philo, t_data *data, pthread_t *philo_monitor)
     sem_wait(data->sem_forks);
     if (check_create_state(data, philo->philo_id))
     {
-        printf("philo %d died while waiting fot a fork, about to exit\n", philo->philo_id + 1);
+        //printf("philo %d died while waiting fot a fork, about to exit\n", philo->philo_id + 1);
         drop_forks(philo, data);
         exit_philo(philo, data, philo_monitor);
     }
@@ -114,27 +114,27 @@ void    philo_process(t_philo *philo, t_data *data, int i)
     {
         take_forks(philo, data, &monitoring_thread);
         if (check_create_state(data, philo->philo_id))
-            (printf("philo %d, on arrete ici\n", philo->philo_id + 1), exit_philo(philo, data, &monitoring_thread));
+            exit_philo(philo, data, &monitoring_thread);
         //self_monitoring(philo, data);
         
         eating_state(philo, data, &monitoring_thread);
         if (check_create_state(data, philo->philo_id))
-            (printf("philo %d, on arrete ici\n", philo->philo_id + 1), exit_philo(philo, data, &monitoring_thread));
+            exit_philo(philo, data, &monitoring_thread);
         //self_monitoring(philo, data);
         drop_forks(philo, data);
 
         //printf("%d ok ici\n", philo->philo_id + 1);
         //self_monitoring(philo, data);
         if (check_create_state(data, philo->philo_id))
-            (printf("philo %d, on arrete ici\n", philo->philo_id + 1), exit_philo(philo, data, &monitoring_thread));
+            exit_philo(philo, data, &monitoring_thread);
         sleeping_state(philo, data, &monitoring_thread);
 
         //self_monitoring(philo, data);
         if (check_create_state(data, philo->philo_id))
-            (printf("philo %d, on arrete ici\n", philo->philo_id + 1), exit_philo(philo, data, &monitoring_thread));
+            exit_philo(philo, data, &monitoring_thread);
         thinking_state(philo, data, &monitoring_thread);
     }
-    (printf("philo %d, on arrete ici\n", philo->philo_id + 1), exit_philo(philo, data, &monitoring_thread));
+    exit_philo(philo, data, &monitoring_thread);
 }
 
 /* Create child processes, ie philosophers */

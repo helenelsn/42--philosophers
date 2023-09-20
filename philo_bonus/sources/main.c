@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 20:43:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/19 23:20:30 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/20 16:01:21 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ int	main(int argc, char **argv)
 		return (3);
 	create_threads(&data, argc - 1);
 	parent_process(&philo, &data);
+	//printf("main, ok ici\n");
 	join_main_threads(&data, argc - 1);
-	printf("main, ok ici\n");
 	exit_parent(&philo, &data);
 	return (0);
 }
