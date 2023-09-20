@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/18 21:09:31 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/20 16:40:34 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ typedef struct s_data
 	sem_t			*sem_ate_enough;
 	sem_t			*sem_end;
 	sem_t			*sem_end_msg;
-	sem_t 			**sem_create_check;
 	sem_t 			**sem_create;
+	sem_t 			**sem_create_check;
+	char			**names_create;
+	char			**names_create_check;
 }					t_data;
 
 typedef struct s_philo
@@ -90,6 +92,7 @@ void				set_starting_time(t_philo *philo);
 bool				init_data(t_data *data, char *count);
 bool				init_philo(t_philo *philo, t_data *data, char **args);
 void				unlink_semaphores(long philos_nb);
+void				close_semaphores(t_philo *philo, t_data *data);
 
 /* routine */
 bool				create_philos(t_data *data, t_philo *philo);

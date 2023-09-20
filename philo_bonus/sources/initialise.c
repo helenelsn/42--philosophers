@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialise.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:31:58 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/18 21:19:57 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/20 16:43:03 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	unlink_semaphores(long philos_nb)
 {
 	int 	i;
+	char 	*name;
+	char	*name_check;
 
 	i = 1;
 	sem_unlink(SEMA_FORKS);
@@ -26,8 +28,12 @@ void	unlink_semaphores(long philos_nb)
 	sem_unlink(SEMA_DEATH_CHECK);
 	while (i <= philos_nb)
 	{
-		sem_unlink(ft_itoa(i));
-		sem_unlink(ft_itoa(-i));
+		name = ft_itoa(i);
+		name_check = ft_itoa(-i);
+		sem_unlink(name);
+		sem_unlink(name_check);
+		free(name);
+		free(name_check);
 		i++;
 	}
 }
@@ -54,6 +60,36 @@ bool	init_data(t_data *data, char *count)
 	data->sem_forks = sem_open(SEMA_FORKS, SEMA_FLAGS, SEMA_MODES,
 			data->philos_count);
 	data->sem_state_msg = sem_open(SEMA_STREAM, SEMA_FLAGS, SEMA_MODES, 1);
+	if (data->sem_forks == SEM_FAILED || data->sem_ate_enough == SEM_FAILED
+		|| data->sem_state_msg == SEM_FAILED)
+		return (false);
+	
+	
+	data->names_create_check = ft_calloc(sizeof(char *), data->philos_count);
+	if (!data->names_create_check)
+		return (false);
+	data->names_create = ft_calloc(sizeof(char *), data->philos_count);
+	if (!data->names_create)
+		return (free(data->sem_create_check), false);
+	i = 0;
+	while (i < data->philos_count)
+	{
+		data->names_create[i] = ft_itoa(-(i + 1));
+		data->names_create_check[i] = ft_itoa(i + 1);
+		if (!data->names_create[i] || !data->names_create_check[i])
+		{
+			if (!data->names_create[i])
+				free(data->names_create[i]);
+			if (!data->names_create_check[i])
+				free(data->names_create_check[i]);
+			while (--i)
+				(free(data->names_create[i]), free(data->names_create_check[i]));
+			//close_semaphores();
+			return (false);
+		}
+		i++;
+	}
+
 
 	data->sem_create_check = ft_calloc(sizeof(sem_t *), data->philos_count);
 	if (!data->sem_create_check)
@@ -63,15 +99,14 @@ bool	init_data(t_data *data, char *count)
 		return (free(data->sem_create_check), false);
 	while (i < data->philos_count)
 	{
-		data->sem_create_check[i] = sem_open(ft_itoa(i + 1), SEMA_FLAGS, SEMA_MODES, 1);
+		data->sem_create_check[i] = sem_open(data->names_create_check[i], SEMA_FLAGS, SEMA_MODES, 1);
 		if (!data->sem_create_check[i])
 		{
-			sem_unlink(ft_itoa(i + 1));
+			sem_unlink(data->names_create_check[i]);
 			while (--i)
 			{
 				sem_close(data->sem_create_check[i]);
-				sem_unlink(ft_itoa(i + 1));
-
+				sem_unlink(data->names_create_check[i]);
 			}
 		}
 		i++;
@@ -83,9 +118,7 @@ bool	init_data(t_data *data, char *count)
 		i++;
 	}
 	
-	if (data->sem_forks == SEM_FAILED || data->sem_ate_enough == SEM_FAILED
-		|| data->sem_state_msg == SEM_FAILED)
-		return (false);
+	
 	return (true);
 }
 

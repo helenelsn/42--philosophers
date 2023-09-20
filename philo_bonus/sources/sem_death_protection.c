@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:16:13 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/19 23:17:54 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/20 16:44:35 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ bool    check_create_state(t_data *data, int n)
 
     state = true;
     sem_wait(data->sem_create_check[n]);
-    if (sem_open(ft_itoa(-((n + 1))), 0) == SEM_FAILED)
+    if (sem_open(data->names_create[n], 0) == SEM_FAILED)
         state = false;
     sem_post(data->sem_create_check[n]);
     // if (state == true)
@@ -39,7 +39,7 @@ void    end_simulation(t_data *data)
     i = 0;
     while (i < data->philos_count)
     {
-        data->sem_create[i] = sem_open(ft_itoa(-((i + 1))), SEMA_FLAGS, SEMA_MODES, 0);
+        data->sem_create[i] = sem_open(data->names_create[i], SEMA_FLAGS, SEMA_MODES, 0);
         if (!data->sem_create[i])
         {
             /* Idkkk */
