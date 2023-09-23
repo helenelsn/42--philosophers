@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:31:58 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/23 15:41:54 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/23 15:45:58 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ bool	init_data(t_data *data, char *count)
 		i++;
 	}
 
-
 	data->sem_create_check = ft_calloc(sizeof(sem_t *), data->philos_count);
 	if (!data->sem_create_check)
 		return (false);
 	data->sem_create = ft_calloc(sizeof(sem_t *), data->philos_count);
 	if (!data->sem_create)
 		return (free(data->sem_create_check), false);
+	i = 0;
 	while (i < data->philos_count)
 	{
 		data->sem_create_check[i] = sem_open(data->names_create_check[i], SEMA_FLAGS, SEMA_MODES, 1);
