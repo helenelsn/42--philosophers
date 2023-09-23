@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:31:58 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/20 16:43:03 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/23 15:41:54 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	unlink_semaphores(long philos_nb)
 	sem_unlink(SEMA_STREAM);
 	sem_unlink(SEMA_MEALS);
 	sem_unlink(SEMA_LAST_MEAL);
-	sem_unlink(SEMA_END);
+	sem_unlink(SEMA_END); //todel 
 	sem_unlink(SEMA_END_MSG);
-	sem_unlink(SEMA_DEATH_CHECK);
+	sem_unlink(SEMA_DEATH_CHECK); //todel
 	while (i <= philos_nb)
 	{
 		name = ft_itoa(i);
@@ -54,7 +54,7 @@ bool	init_data(t_data *data, char *count)
 	unlink_semaphores(ft_atoi(count));
 	data->stop_sim = false;
 	data->philos_count = ft_atoi(count);
-	data->sem_end = NULL;
+	data->sem_end = NULL; //todel 
 	data->sem_end_msg = NULL;
 	data->sem_ate_enough = sem_open(SEMA_MEALS, SEMA_FLAGS, SEMA_MODES, 0);
 	data->sem_forks = sem_open(SEMA_FORKS, SEMA_FLAGS, SEMA_MODES,

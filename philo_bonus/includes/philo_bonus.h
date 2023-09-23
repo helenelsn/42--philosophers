@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/20 16:40:34 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/23 15:42:16 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@
 # define SEMA_STREAM "/philo_state_display"
 # define SEMA_MEALS "/philo_meals_count"
 # define SEMA_LAST_MEAL "/philo_last_meal_timestamp"
-# define SEMA_END "/philo_end_simulation"
+# define SEMA_END "/philo_end_simulation" //todel
 # define SEMA_END_MSG "/philo_death_message"
-# define SEMA_DEATH_CHECK "/philo_check_sem_creation"
+# define SEMA_DEATH_CHECK "/philo_check_sem_creation" //todel
 
 # define SEMA_PROTECT_COUNT	20
 
@@ -65,7 +65,7 @@ typedef struct s_data
 	sem_t			*sem_forks;
 	sem_t			*sem_state_msg;
 	sem_t			*sem_ate_enough;
-	sem_t			*sem_end;
+	sem_t			*sem_end; //todel
 	sem_t			*sem_end_msg;
 	sem_t 			**sem_create;
 	sem_t 			**sem_create_check;
