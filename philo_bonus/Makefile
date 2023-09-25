@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
+#    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:42:20 by Helene            #+#    #+#              #
-#    Updated: 2023/09/18 16:23:49 by hlesny           ###   ########.fr        #
+#    Updated: 2023/09/25 14:02:17 by Helene           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC = 	main.c \
 		parsing.c \
 		main_monitoring.c \
 		routine.c \
+		philo_states.c \
 		death_while_waiting.c \
 		destroy.c \
 		utils.c \

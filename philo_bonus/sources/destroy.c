@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:42:46 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/23 16:01:37 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 13:45:34 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,64 +76,64 @@ void	join_main_threads(t_data *data, int args_nb)
 	}
 }
 
-void	exit_philo(t_philo *philo, t_data *data, pthread_t *philo_monitor)
+void	exit_philo(t_philo *philo)
 {
 	int i;
 	
-	pthread_join(*philo_monitor, NULL);
+	pthread_join(philo->monitoring_thread, NULL);
 	
-	sem_close(data->sem_ate_enough);
-	sem_close(data->sem_forks);
-	sem_close(data->sem_state_msg);
+	sem_close(philo->data->sem_ate_enough);
+	sem_close(philo->data->sem_forks);
+	sem_close(philo->data->sem_state_msg);
 	sem_close(philo->sem_last_meal);
-	if (data->sem_end_msg)
-		sem_close(data->sem_end_msg);
+	if (philo->data->sem_end_msg)
+		sem_close(philo->data->sem_end_msg);
 
 	i = 0;
-	while (i < data->philos_count)
+	while (i < philo->data->philos_count)
 	{
-		sem_close(data->sem_create_check[i]);
-		if (data->sem_create[i])
-			sem_close(data->sem_create[i]);
+		sem_close(philo->data->sem_create_check[i]);
+		if (philo->data->sem_create[i])
+			sem_close(philo->data->sem_create[i]);
 		i++;
 	}
 
 	i = 0;
-	while (i < data->philos_count)
+	while (i < philo->data->philos_count)
 	{
-		free(data->names_create[i]);
-		free(data->names_create_check[i]);
+		free(philo->data->names_create[i]);
+		free(philo->data->names_create_check[i]);
 		i++;
 	}
 
-	free(data->names_create);
-	free(data->names_create_check);
-	free(data->sem_create);
-	free(data->sem_create_check);
+	free(philo->data->names_create);
+	free(philo->data->names_create_check);
+	free(philo->data->sem_create);
+	free(philo->data->sem_create_check);
 
-	free(data->pids);
+	free(philo->data->pids);
 
 	exit(0);
 	
 }
 
-void	exit_parent(t_philo *philo, t_data *data)
+void	exit_parent(t_philo *philo)
 {
 	int i;
 		
-	sem_close(data->sem_ate_enough);
-	sem_close(data->sem_forks);
-	sem_close(data->sem_state_msg);
+	sem_close(philo->data->sem_ate_enough);
+	sem_close(philo->data->sem_forks);
+	sem_close(philo->data->sem_state_msg);
 	sem_close(philo->sem_last_meal);
-	if (data->sem_end_msg)
-		sem_close(data->sem_end_msg);
+	if (philo->data->sem_end_msg)
+		sem_close(philo->data->sem_end_msg);
 
 	i = 0;
-	while (i < data->philos_count)
+	while (i < philo->data->philos_count)
 	{
-		sem_close(data->sem_create_check[i]);
-		if (data->sem_create[i])
-			(sem_close(data->sem_create[i]), sem_close(data->sem_create[i]));
+		sem_close(philo->data->sem_create_check[i]);
+		if (philo->data->sem_create[i])
+			(sem_close(philo->data->sem_create[i]), sem_close(philo->data->sem_create[i]));
 		i++;
 	}
 
@@ -143,25 +143,25 @@ void	exit_parent(t_philo *philo, t_data *data)
 	sem_unlink(SEMA_MEALS);
 	sem_unlink(SEMA_LAST_MEAL);
 	sem_unlink(SEMA_END_MSG);
-	while (i < data->philos_count)
+	while (i < philo->data->philos_count)
 	{
-		sem_unlink(data->names_create[i]);
-		sem_unlink(data->names_create_check[i]);
+		sem_unlink(philo->data->names_create[i]);
+		sem_unlink(philo->data->names_create_check[i]);
 		i++;
 	}
 
 	i = 0;
-	while (i < data->philos_count)
+	while (i < philo->data->philos_count)
 	{
-		free(data->names_create[i]);
-		free(data->names_create_check[i]);
+		free(philo->data->names_create[i]);
+		free(philo->data->names_create_check[i]);
 		i++;
 	}
 
-	free(data->names_create);
-	free(data->names_create_check);
-	free(data->sem_create);
-	free(data->sem_create_check);
+	free(philo->data->names_create);
+	free(philo->data->names_create_check);
+	free(philo->data->sem_create);
+	free(philo->data->sem_create_check);
 
-	free(data->pids);
+	free(philo->data->pids);
 }

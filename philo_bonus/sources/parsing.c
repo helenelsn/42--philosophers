@@ -3,34 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 23:36:47 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/14 23:41:25 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/25 13:40:59 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
+void    print_error(int error_type)
+{
+    if (error_type == negative_philos)
+        write(STDERR_FILENO, "This program requires a positive amount of \
+            philosophers to start the simulation!\n", 95);
+    else if (error_type == invalid_amount)
+        write(STDERR_FILENO, "This program requires between \
+        4 and 5 arguments!\n", 49);
+    else if (error_type == non_numeric)
+        write(STDERR_FILENO, "This program requires numeric and \
+                    non-negative arguments!\n", 58);
+    write(STDERR_FILENO, "Example : ./philo 4 400 100 50 3\n", 33);
+}
+
 bool	check_inputs_amount(int args_nb)
 {
 	if (args_nb < 4 || args_nb > 5)
-	{
-		write(STDERR_FILENO, "This program requires between \
-            4 and 5 arguments!\n", 49);
-		return (false);
-	}
+		return (print_error(invalid_amount), false);
 	return (true);
 }
 
 bool    check_philosophers_count(char *philos_count)
 {
     if (ft_atoi(philos_count) == 0)
-    {
-        write(STDERR_FILENO, "This program requires a positive amount of \
-            philosophers to start the simulation!\n", 95);
-        return (false);
-    }
+        return (print_error(negative_philos), false);
     return (true);
 }
 
@@ -50,11 +56,7 @@ bool	valid_input(int args_nb, char **inputs)
 		while (inputs[i][j])
 		{
 			if (inputs[i][j] < '0' || inputs[i][j] > '9')
-			{
-				write(STDERR_FILENO, "This program requires numeric and \
-                    non-negative arguments!\n", 58);
-				return (false);
-			}
+				return (print_error(non_numeric), false);
 			j++;
 		}
 		i++;

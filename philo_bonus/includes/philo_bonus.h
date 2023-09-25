@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/25 12:02:15 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 13:53:27 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,19 @@ enum				e_forks
 	both
 };
 
+enum 	e_data_type
+{
+	sem_name,	
+	sem
+};
+
+enum 	e_parsing_error_type
+{
+	non_numeric,
+	negative_philos,
+	invalid_amount
+};
+
 typedef struct s_data
 {
 	pthread_t		check_meals;
@@ -69,7 +82,6 @@ typedef struct s_data
 	sem_t			*sem_forks;
 	sem_t			*sem_state_msg;
 	sem_t			*sem_ate_enough;
-	sem_t			*sem_end; //todel
 	sem_t			*sem_end_msg;
 	sem_t 			**sem_create;
 	sem_t 			**sem_create_check;
@@ -80,11 +92,7 @@ typedef struct s_data
 typedef struct s_philo
 {
 	int				philo_id;
-	// pthread_t	monitoring_thread;
-	// long			time_to_die;
-	// long			time_to_eat;
-	// long			time_to_sleep;
-	// long			number_of_times_each_philosopher_must_eat;
+	pthread_t		monitoring_thread;
 	unsigned int	meals_count;
 	unsigned long	last_meal_tstamp;
 	sem_t			*sem_last_meal;
@@ -92,39 +100,46 @@ typedef struct s_philo
 }					t_philo;
 
 /* initialise */
-void				set_starting_time(t_philo *philo);
-bool				init_data(t_data *data, char *count);
-bool				init_philo(t_philo *philo, t_data *data, char **args);
+bool				init_data(t_data *data, char **args);
+bool				init_philo(t_philo *philo, t_data *data);
 void				unlink_semaphores(long philos_nb);
 void				close_semaphores(t_philo *philo, t_data *data);
 
 /* routine */
-bool				create_philos(t_data *data, t_philo *philo);
-void				philo_process(t_philo *philo, t_data *data, int i);
-void				self_monitoring(t_philo *philo, t_data *data,
-						pthread_t *philo_monitor);
+bool				create_philos(t_philo *philo);
+void				philo_process(t_philo *philo, int i);
+void				self_monitoring(t_philo *philo, t_data *data);
 void				*check_for_death(void *arg);
+
+/* philosophers states */
+void    			sleeping_state(t_philo *philo);
+void    			thinking_state(t_philo *philo);
+void    			drop_forks(t_philo *philo);
+void    			take_forks(t_philo *philo);
+void    			eating_state(t_philo *philo);
 
 /* main monitoring */
 void				create_threads(t_data *data, int args);
 void				*check_meals_routine(void *data_check);
-void				parent_process(t_philo *philo, t_data *data);
+void				parent_process(t_philo *philo);
 
 /* destroy */
 void				kill_processes(t_data *data);
-void				exit_philo(t_philo *philo, t_data *data,
-						pthread_t *philo_monitor);
+void				exit_philo(t_philo *philo);
 void				join_main_threads(t_data *data, int args_nb);
-void				exit_parent(t_philo *philo, t_data *data);
+void				exit_parent(t_philo *philo);
 
-/* utils */
+/* parsing */
 bool				valid_input(int args_nb, char **inputs);
 long				ft_atoi(const char *nb_str);
+
+/* utils */
 long long			get_current_time(void);
 long long			get_relative_time(t_philo *philo);
-void				ft_usleep(t_philo *philo, t_data *data, int state,
-						pthread_t *philo_monitor);
-void				print_state(t_philo *philo, t_data *data, int state);
+void				set_starting_time(t_philo *philo);
+void				ft_usleep(t_philo *philo, int state);
+void				print_state(t_philo *philo, int state);
+void    			print_error(int error_type);
 
 /* sem_death_protection */
 bool    			check_create_state(t_data *data, int n);
