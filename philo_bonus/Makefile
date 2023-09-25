@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Helene <Helene@student.42.fr>              +#+  +:+       +#+         #
+#    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:42:20 by Helene            #+#    #+#              #
-#    Updated: 2023/09/25 14:02:17 by Helene           ###   ########.fr        #
+#    Updated: 2023/09/25 16:34:25 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ INC_DIR = ./includes/
 SRC_DIR = ./sources/
 SRC = 	main.c \
 		initialise.c \
+		initialise_utils.c \
 		parsing.c \
 		main_monitoring.c \
 		routine.c \
@@ -31,14 +32,14 @@ SRC = 	main.c \
 		utils.c \
 		sem_death_protection.c \
 		ft_atoi.c \
-		ft_itoa.c 
+		ft_itoa.c \
+		ft_calloc.c
 
 OBJ_DIR = ./objects/
 OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 DEP_OBJS = $(addprefix $(OBJ_DIR), $(SRC:.c=.d))
 
 #export C_INCLUDE_PATH = $(INC_DIR):$(INC_BONUS_DIR)
-# pas besoin d'export LIBRARY_PATH car n'utilise pas de librairie(s) ici
 
 all : $(NAME)
 

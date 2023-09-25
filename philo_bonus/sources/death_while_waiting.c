@@ -6,29 +6,16 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 23:21:59 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/25 15:38:59 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:38:07 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
-void	wait_for_starting_time(t_philo *philo)
+void	wait_for_starting_time(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	if (philo->data->time_to_die > philo->data->time_to_eat)
-	{
-		while (get_current_time() < philo->data->starting_time)
-		//+ philo->data->time_to_eat)
-			usleep(100);
-	}
-	else
-	{
-		while (get_current_time() < philo->data->starting_time)
-		//+ philo->data->time_to_die)
-			usleep(100);
-	}
+	while (get_current_time() < data->starting_time)
+		usleep(100);
 }
 
 void	set_end(t_philo *philo)
@@ -56,14 +43,12 @@ void	*check_for_death(void *arg)
 	t_philo			*philo;
 
 	philo = (t_philo *)arg;
-	wait_for_starting_time(philo);
+	wait_for_starting_time(philo->data);
 	while (true)
 	{
 		sem_wait(philo->sem_last_meal);
 		last_meal = philo->last_meal_tstamp;
 		sem_post(philo->sem_last_meal);
-		/* if (sem_open(SEMA_END, 0) != SEM_FAILED)
-			return (NULL); */
 		if (check_create_state(philo->data, philo->philo_id))
 			return (NULL);
 		if (get_relative_time(philo) >= last_meal + philo->data->time_to_die)

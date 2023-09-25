@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/25 13:48:57 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:32:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,10 @@ void	set_starting_time(t_philo *philo)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	philo->data->starting_time = tv.tv_sec * 1000 + tv.tv_usec / 1000 + 10 * philo->data->philos_count;
+	philo->data->starting_time = tv.tv_sec * 1000 + tv.tv_usec / 1000
+		+ 10 * philo->data->philos_count;
 }
 
-/*
-States :    0 when eating
-            1 when sleeping
-            2 when thinking
-*/
 void	ft_usleep(t_philo *philo, int state)
 {
 	unsigned int	state_length;
@@ -67,7 +63,8 @@ void	ft_usleep(t_philo *philo, int state)
 		state_length = get_relative_time(philo) + philo->data->time_to_sleep;
 	else if (state == thinking)
 		state_length = get_relative_time(philo) + ((philo->data->time_to_die
-					- philo->data->time_to_eat - philo->data->time_to_sleep) / 2);
+					- philo->data->time_to_eat - philo->data->time_to_sleep)
+				/ 2);
 	while (get_relative_time(philo) < state_length)
 	{
 		if (check_create_state(philo->data, philo->philo_id))

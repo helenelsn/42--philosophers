@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/25 13:53:27 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:41:30 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <semaphore.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <stddef.h>
+# include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/stat.h> // pour obtenir les définitions des bits de permissions
@@ -26,20 +28,16 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <stdint.h>
-# include <stddef.h>
 
-# define SEMA_MODES 0644 //S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH 
+# define SEMA_MODES 0644    //S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
 # define SEMA_FLAGS O_CREAT //| O_EXCL
 # define SEMA_FORKS "/philo_forks"
 # define SEMA_STREAM "/philo_state_display"
 # define SEMA_MEALS "/philo_meals_count"
 # define SEMA_LAST_MEAL "/philo_last_meal_timestamp"
-# define SEMA_END "/philo_end_simulation" //todel
 # define SEMA_END_MSG "/philo_death_message"
-# define SEMA_DEATH_CHECK "/philo_check_sem_creation" //todel
 
-# define SEMA_PROTECT_COUNT	20
+# define SEMA_PROTECT_COUNT 20
 
 enum				e_state
 {
@@ -55,13 +53,13 @@ enum				e_forks
 	both
 };
 
-enum 	e_data_type
+enum				e_data_type
 {
-	sem_name,	
+	sem_name,
 	sem
 };
 
-enum 	e_parsing_error_type
+enum				e_parsing_error_type
 {
 	non_numeric,
 	negative_philos,
@@ -83,8 +81,8 @@ typedef struct s_data
 	sem_t			*sem_state_msg;
 	sem_t			*sem_ate_enough;
 	sem_t			*sem_end_msg;
-	sem_t 			**sem_create;
-	sem_t 			**sem_create_check;
+	sem_t			**sem_create;
+	sem_t			**sem_create_check;
 	char			**names_create;
 	char			**names_create_check;
 }					t_data;
@@ -102,21 +100,22 @@ typedef struct s_philo
 /* initialise */
 bool				init_data(t_data *data, char **args);
 bool				init_philo(t_philo *philo, t_data *data);
+bool				allocate_data_memory(t_data *data, int data_type);
+void				init_close(t_data *data);
 void				unlink_semaphores(long philos_nb);
-void				close_semaphores(t_philo *philo, t_data *data);
 
 /* routine */
 bool				create_philos(t_philo *philo);
 void				philo_process(t_philo *philo, int i);
-void				self_monitoring(t_philo *philo, t_data *data);
+void				wait_for_starting_time(t_data *data);
 void				*check_for_death(void *arg);
 
 /* philosophers states */
-void    			sleeping_state(t_philo *philo);
-void    			thinking_state(t_philo *philo);
-void    			drop_forks(t_philo *philo);
-void    			take_forks(t_philo *philo);
-void    			eating_state(t_philo *philo);
+void				sleeping_state(t_philo *philo);
+void				thinking_state(t_philo *philo);
+void				drop_forks(t_philo *philo);
+void				take_forks(t_philo *philo);
+void				eating_state(t_philo *philo);
 
 /* main monitoring */
 void				create_threads(t_data *data, int args);
@@ -124,7 +123,8 @@ void				*check_meals_routine(void *data_check);
 void				parent_process(t_philo *philo);
 
 /* destroy */
-void				kill_processes(t_data *data);
+void				close_semaphores(t_philo *philo);
+void				free_data(t_data *data);
 void				exit_philo(t_philo *philo);
 void				join_main_threads(t_data *data, int args_nb);
 void				exit_parent(t_philo *philo);
@@ -139,12 +139,12 @@ long long			get_relative_time(t_philo *philo);
 void				set_starting_time(t_philo *philo);
 void				ft_usleep(t_philo *philo, int state);
 void				print_state(t_philo *philo, int state);
-void    			print_error(int error_type);
+void				print_error(int error_type);
 
 /* sem_death_protection */
-bool    			check_create_state(t_data *data, int n);
-void    			end_simulation(t_data *data);
-bool    			exit_main_process(t_data *data);
+bool				check_create_state(t_data *data, int n);
+void				end_simulation(t_data *data);
+bool				exit_main_process(t_data *data);
 
 char				*ft_itoa(int n);
 void				*ft_calloc(size_t nmemb, size_t size);

@@ -1,32 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/09 20:43:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/25 15:44:00 by hlesny           ###   ########.fr       */
+/*   Created: 2023/09/25 16:33:57 by hlesny            #+#    #+#             */
+/*   Updated: 2023/09/25 16:34:59 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
-int	main(int argc, char **argv)
+void	*ft_memset(void *s, int c, size_t n)
 {
-	t_philo	philo;
-	t_data	data;
+	unsigned char	*dst;
+	size_t			i;
 
-	if (!valid_input(argc - 1, argv + 1))
-		return (1);
-	if (init_data(&data, argv + 1) == false || init_philo(&philo,
-			&data) == false)
-		return (1);
-	if (create_philos(&philo) == false)
-		return (3);
-	create_threads(&data, argc - 1);
-	parent_process(&philo);
-	join_main_threads(&data, argc - 1);
-	exit_parent(&philo);
-	return (0);
+	dst = s;
+	i = 0;
+	while (i < n)
+	{
+		dst[i] = (unsigned char)c;
+		i++;
+	}
+	return (s);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*tab;
+
+	if (size && SIZE_MAX / size < nmemb)
+		return (0);
+	tab = malloc(nmemb * size);
+	if (!tab)
+		return (0);
+	ft_memset(tab, 0, nmemb * size);
+	return (tab);
 }

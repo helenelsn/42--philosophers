@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:31:58 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/25 15:40:03 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:30:38 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,30 +36,6 @@ void	unlink_semaphores(long philos_nb)
 	}
 }
 
-bool	allocate_data_memory(t_data *data, int data_type)
-{
-	if (data_type == sem_name)
-	{
-		data->names_create_check = ft_calloc(sizeof(char *),
-				data->philos_count);
-		if (!data->names_create_check)
-			return (false);
-		data->names_create = ft_calloc(sizeof(char *), data->philos_count);
-		if (!data->names_create)
-			return (free(data->sem_create_check), false);
-	}
-	else
-	{
-		data->sem_create_check = ft_calloc(sizeof(sem_t *), data->philos_count);
-		if (!data->sem_create_check)
-			return (false);
-		data->sem_create = ft_calloc(sizeof(sem_t *), data->philos_count);
-		if (!data->sem_create)
-			return (free(data->sem_create_check), false);
-	}
-	return (true);
-}
-
 bool	set_death_sem_names(t_data *data)
 {
 	int	i;
@@ -73,14 +49,8 @@ bool	set_death_sem_names(t_data *data)
 		data->names_create_check[i] = ft_itoa(i + 1);
 		if (!data->names_create[i] || !data->names_create_check[i])
 		{
-			if (!data->names_create[i])
-				free(data->names_create[i]);
-			if (!data->names_create_check[i])
-				free(data->names_create_check[i]);
-			while (--i)
-				(free(data->names_create[i]),
-						free(data->names_create_check[i]));
-			//close_semaphores();
+			free_data(data);
+			init_close(data);
 			return (false);
 		}
 		i++;
@@ -97,6 +67,7 @@ bool	set_death_sem(t_data *data)
 	i = 0;
 	while (i < data->philos_count)
 	{
+		data->sem_create[i] = NULL;
 		data->sem_create_check[i] = sem_open(data->names_create_check[i],
 				SEMA_FLAGS, SEMA_MODES, 1);
 		if (!data->sem_create_check[i])
@@ -111,9 +82,6 @@ bool	set_death_sem(t_data *data)
 		}
 		i++;
 	}
-	i = 0;
-	while (i < data->philos_count)
-		(data->sem_create[i] = NULL, i++);
 	return (true);
 }
 
@@ -134,9 +102,9 @@ bool	init_data(t_data *data, char **args)
 	data->sem_forks = sem_open(SEMA_FORKS, SEMA_FLAGS, SEMA_MODES,
 			data->philos_count);
 	data->sem_state_msg = sem_open(SEMA_STREAM, SEMA_FLAGS, SEMA_MODES, 1);
-	if (data->sem_forks == SEM_FAILED || data->sem_ate_enough == SEM_FAILED
+	if (data->sem_ate_enough == SEM_FAILED || data->sem_forks == SEM_FAILED
 		|| data->sem_state_msg == SEM_FAILED)
-		return (false);
+		return (init_close(data), false);
 	if (set_death_sem_names(data) == false || set_death_sem(data) == false)
 		return (false);
 	data->pids = (pid_t *)malloc(sizeof(pid_t) * data->philos_count);

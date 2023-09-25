@@ -6,41 +6,13 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 04:33:22 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/18 20:17:30 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:35:11 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
-void	*ft_memset(void *s, int c, size_t n)
-{
-	unsigned char	*dst;
-	size_t			i;
-
-	dst = s;
-	i = 0;
-	while (i < n)
-	{
-		dst[i] = (unsigned char)c;
-		i++;
-	}
-	return (s);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	void	*tab;
-
-	if (size && SIZE_MAX / size < nmemb)
-		return (0);
-	tab = malloc(nmemb * size);
-	if (!tab)
-		return (0);
-	ft_memset(tab, 0, nmemb * size);
-	return (tab);
-}
-
-long 		ft_strlen(const char *str)
+long	ft_strlen(const char *str)
 {
 	int	i;
 
@@ -49,7 +21,7 @@ long 		ft_strlen(const char *str)
 	i = 0;
 	while (str[i])
 		i++;
-	return (i);	
+	return (i);
 }
 
 char	*ft_strdup(const char *src)
