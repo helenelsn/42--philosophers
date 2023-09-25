@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 19:19:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/14 23:49:02 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:50:18 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,31 +23,6 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-typedef struct s_data
-{
-	int				philos_count;
-	long			time_to_die;
-	long			time_to_eat;
-	long			time_to_sleep;
-	long			number_of_times_each_philosopher_must_eat;
-	bool			end_simulation;
-	unsigned long	starting_time;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	msg_display;
-	pthread_mutex_t	end_simulation_m;
-}					t_data;
-
-typedef struct s_philo
-{
-	pthread_t		tid;
-	int				philo_id;
-	unsigned int	meals_count;
-	unsigned long	last_meal_tstamp;
-	pthread_mutex_t	meals_count_m;
-	pthread_mutex_t	last_meal_m;
-	struct s_data	*data;
-}					t_philo;
-
 enum				e_state
 {
 	eating,
@@ -62,6 +37,38 @@ enum				e_fork
 	right,
 	both
 };
+
+enum				e_parsing_error_type
+{
+	non_numeric,
+	negative_philos,
+	invalid_amount
+};
+
+typedef struct s_data
+{
+	int				philos_count;
+	long long		time_to_die;
+	long long		time_to_eat;
+	long long		time_to_sleep;
+	long			number_of_times_each_philosopher_must_eat;
+	bool			end_simulation;
+	long long		starting_time;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	msg_display;
+	pthread_mutex_t	end_simulation_m;
+}					t_data;
+
+typedef struct s_philo
+{
+	pthread_t		tid;
+	int				philo_id;
+	unsigned int	meals_count;
+	long long		last_meal_tstamp;
+	pthread_mutex_t	meals_count_m;
+	pthread_mutex_t	last_meal_m;
+	struct s_data	*data;
+}					t_philo;
 
 /* initialise */
 void				init_data_mutexes(t_data *data);

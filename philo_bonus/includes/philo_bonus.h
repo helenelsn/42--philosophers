@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/25 16:41:30 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:49:51 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ typedef struct s_data
 {
 	pthread_t		check_meals;
 	int				philos_count;
-	unsigned long	starting_time;
-	long			time_to_die;
-	long			time_to_eat;
-	long			time_to_sleep;
+	long long		starting_time;
+	long long		time_to_die;
+	long long		time_to_eat;
+	long long		time_to_sleep;
 	long			number_of_times_each_philosopher_must_eat;
 	bool			stop_sim;
 	pid_t			*pids;
@@ -92,7 +92,7 @@ typedef struct s_philo
 	int				philo_id;
 	pthread_t		monitoring_thread;
 	unsigned int	meals_count;
-	unsigned long	last_meal_tstamp;
+	long long		last_meal_tstamp;
 	sem_t			*sem_last_meal;
 	t_data			*data;
 }					t_philo;

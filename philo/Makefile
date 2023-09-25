@@ -6,15 +6,14 @@
 #    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/09 20:38:24 by Helene            #+#    #+#              #
-#    Updated: 2023/09/14 23:47:58 by hlesny           ###   ########.fr        #
+#    Updated: 2023/09/25 16:47:02 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 CC = cc
-CFLAGS = -I -g3 -MMD #-fsanitize=address -g # -g pour afficher les numéros de lignes qui ont produit l'erreur
+CFLAGS = -Wall -Werror -Wextra -I -g3 -MMD #-fsanitize=address -g # -g pour afficher les numéros de lignes qui ont produit l'erreur
 T_FLAGS = -fsanitize=thread -g 
-# -Wall -Werror -Wextra 
 RM = rm -f
 
 INC_DIR = ./includes/

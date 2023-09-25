@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 23:21:59 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/25 16:38:07 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:50:54 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	set_end(t_philo *philo)
 
 void	*check_for_death(void *arg)
 {
-	unsigned long	last_meal;
+	long long		last_meal;
 	t_philo			*philo;
 
 	philo = (t_philo *)arg;

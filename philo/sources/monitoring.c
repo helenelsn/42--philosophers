@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/14 21:33:26 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:51:20 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 /* Check if a philosopher died */
 bool	check_hunger(t_philo *philos)
 {
-	int				i;
-	unsigned long	last_meal;
+	int			i;
+	long long	last_meal;
 
 	i = 0;
 	last_meal = 0;
