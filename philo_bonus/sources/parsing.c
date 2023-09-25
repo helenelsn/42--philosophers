@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 23:36:47 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/25 13:40:59 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 15:37:30 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
-void    print_error(int error_type)
+void	print_error(int error_type)
 {
-    if (error_type == negative_philos)
-        write(STDERR_FILENO, "This program requires a positive amount of \
-            philosophers to start the simulation!\n", 95);
-    else if (error_type == invalid_amount)
-        write(STDERR_FILENO, "This program requires between \
-        4 and 5 arguments!\n", 49);
-    else if (error_type == non_numeric)
-        write(STDERR_FILENO, "This program requires numeric and \
-                    non-negative arguments!\n", 58);
-    write(STDERR_FILENO, "Example : ./philo 4 400 100 50 3\n", 33);
+	if (error_type == negative_philos)
+		write(STDERR_FILENO, "This program requires a positive amount of \
+philosophers to start the simulation!\n", 95);
+	else if (error_type == invalid_amount)
+		write(STDERR_FILENO, "This program requires between \
+4 and 5 arguments!\n", 49);
+	else if (error_type == non_numeric)
+		write(STDERR_FILENO, "This program requires numeric and \
+non-negative arguments!\n", 58);
+	write(STDERR_FILENO, "Example : ./philo 4 400 100 50 3\n", 33);
 }
 
 bool	check_inputs_amount(int args_nb)
@@ -33,11 +33,11 @@ bool	check_inputs_amount(int args_nb)
 	return (true);
 }
 
-bool    check_philosophers_count(char *philos_count)
+bool	check_philosophers_count(char *philos_count)
 {
-    if (ft_atoi(philos_count) == 0)
-        return (print_error(negative_philos), false);
-    return (true);
+	if (ft_atoi(philos_count) == 0)
+		return (print_error(negative_philos), false);
+	return (true);
 }
 
 bool	valid_input(int args_nb, char **inputs)
@@ -61,7 +61,7 @@ bool	valid_input(int args_nb, char **inputs)
 		}
 		i++;
 	}
-    if (check_philosophers_count(*inputs) == false)
-        return (false);
+	if (check_philosophers_count(*inputs) == false)
+		return (false);
 	return (true);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sem_death_protection.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:16:13 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/20 16:44:35 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 15:32:11 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,17 @@
 
 bool    check_create_state(t_data *data, int n)
 {
+    sem_t   *temp;
     bool    state;
 
     state = true;
     sem_wait(data->sem_create_check[n]);
-    if (sem_open(data->names_create[n], 0) == SEM_FAILED)
+    temp = sem_open(data->names_create[n], 0);
+    if (temp == SEM_FAILED)
         state = false;
+    else
+        sem_close(temp);
     sem_post(data->sem_create_check[n]);
-    // if (state == true)
-    //     printf("philo %d, on arrete ici\n", n + 1);
     return (state);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialise.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:31:58 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/25 13:26:43 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 15:40:03 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	unlink_semaphores(long philos_nb)
 {
-	int 	i;
-	char 	*name;
+	int		i;
+	char	*name;
 	char	*name_check;
 
 	i = 1;
@@ -36,11 +36,12 @@ void	unlink_semaphores(long philos_nb)
 	}
 }
 
-bool 	allocate_data_memory(t_data *data, int data_type)
+bool	allocate_data_memory(t_data *data, int data_type)
 {
 	if (data_type == sem_name)
 	{
-		data->names_create_check = ft_calloc(sizeof(char *), data->philos_count);
+		data->names_create_check = ft_calloc(sizeof(char *),
+				data->philos_count);
 		if (!data->names_create_check)
 			return (false);
 		data->names_create = ft_calloc(sizeof(char *), data->philos_count);
@@ -59,10 +60,10 @@ bool 	allocate_data_memory(t_data *data, int data_type)
 	return (true);
 }
 
-bool 	set_death_sem_names(t_data *data)
+bool	set_death_sem_names(t_data *data)
 {
-	int i;
-	
+	int	i;
+
 	if (allocate_data_memory(data, sem_name) == false)
 		return (false);
 	i = 0;
@@ -77,7 +78,8 @@ bool 	set_death_sem_names(t_data *data)
 			if (!data->names_create_check[i])
 				free(data->names_create_check[i]);
 			while (--i)
-				(free(data->names_create[i]), free(data->names_create_check[i]));
+				(free(data->names_create[i]),
+						free(data->names_create_check[i]));
 			//close_semaphores();
 			return (false);
 		}
@@ -86,16 +88,17 @@ bool 	set_death_sem_names(t_data *data)
 	return (true);
 }
 
-bool 	set_death_sem(t_data *data)
+bool	set_death_sem(t_data *data)
 {
 	int	i;
-	
+
 	if (allocate_data_memory(data, sem) == false)
 		return (false);
 	i = 0;
 	while (i < data->philos_count)
 	{
-		data->sem_create_check[i] = sem_open(data->names_create_check[i], SEMA_FLAGS, SEMA_MODES, 1);
+		data->sem_create_check[i] = sem_open(data->names_create_check[i],
+				SEMA_FLAGS, SEMA_MODES, 1);
 		if (!data->sem_create_check[i])
 		{
 			sem_unlink(data->names_create_check[i]);
@@ -142,11 +145,10 @@ bool	init_data(t_data *data, char **args)
 	return (true);
 }
 
-bool	init_philo(t_philo *philo, t_data *data) // modif les philo->data->...  ->  mettre directement dans init_data()
+bool	init_philo(t_philo *philo, t_data *data)
 {
 	sem_unlink(SEMA_LAST_MEAL);
 	philo->data = data;
-	
 	philo->meals_count = 0;
 	philo->last_meal_tstamp = 0;
 	philo->sem_last_meal = sem_open(SEMA_LAST_MEAL, SEMA_FLAGS, SEMA_MODES, 1);
