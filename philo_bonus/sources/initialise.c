@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/10 22:31:58 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/23 15:45:58 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 11:57:28 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	set_starting_time(t_philo *philo)
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	philo->starting_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	philo->data->starting_time = tv.tv_sec * 1000 + tv.tv_usec / 1000 + 10 * philo->data->philos_count; //modif
 }
 
 bool	init_data(t_data *data, char *count)
@@ -56,6 +56,7 @@ bool	init_data(t_data *data, char *count)
 	data->philos_count = ft_atoi(count);
 	data->sem_end = NULL; //todel 
 	data->sem_end_msg = NULL;
+	data->starting_time = 0;
 	data->sem_ate_enough = sem_open(SEMA_MEALS, SEMA_FLAGS, SEMA_MODES, 0);
 	data->sem_forks = sem_open(SEMA_FORKS, SEMA_FLAGS, SEMA_MODES,
 			data->philos_count);
@@ -122,19 +123,19 @@ bool	init_data(t_data *data, char *count)
 	return (true);
 }
 
-bool	init_philo(t_philo *philo, t_data *data, char **args)
+bool	init_philo(t_philo *philo, t_data *data, char **args) // modif les philo->data->...  ->  mettre directement dans init_data()
 {
 	sem_unlink(SEMA_LAST_MEAL);
-	philo->time_to_die = ft_atoi(args[0]);
-	philo->time_to_eat = ft_atoi(args[1]);
-	philo->time_to_sleep = ft_atoi(args[2]);
-	philo->meals_count = 0;
-	philo->starting_time = 0;
-	philo->last_meal_tstamp = 0;
 	philo->data = data;
-	philo->number_of_times_each_philosopher_must_eat = -1;
+	philo->data->time_to_die = ft_atoi(args[0]);
+	philo->data->time_to_eat = ft_atoi(args[1]);
+	philo->data->time_to_sleep = ft_atoi(args[2]);
+	philo->meals_count = 0;
+	// philo->data->starting_time = 0;
+	philo->last_meal_tstamp = 0;
+	philo->data->number_of_times_each_philosopher_must_eat = -1;
 	if (args[3])
-		philo->number_of_times_each_philosopher_must_eat = ft_atoi(args[3]);
+		philo->data->number_of_times_each_philosopher_must_eat = ft_atoi(args[3]);
 	philo->sem_last_meal = sem_open(SEMA_LAST_MEAL, SEMA_FLAGS, SEMA_MODES, 1);
 	if (philo->sem_last_meal == SEM_FAILED)
 		return (false);

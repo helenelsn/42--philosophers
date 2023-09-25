@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 17:42:41 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/23 15:42:16 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 12:02:15 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,13 @@ enum				e_forks
 
 typedef struct s_data
 {
-	pthread_t		check_death;
 	pthread_t		check_meals;
 	int				philos_count;
+	unsigned long	starting_time;
+	long			time_to_die;
+	long			time_to_eat;
+	long			time_to_sleep;
+	long			number_of_times_each_philosopher_must_eat;
 	bool			stop_sim;
 	pid_t			*pids;
 	sem_t			*sem_forks;
@@ -76,12 +80,12 @@ typedef struct s_data
 typedef struct s_philo
 {
 	int				philo_id;
-	long			time_to_die;
-	long			time_to_eat;
-	long			time_to_sleep;
-	long			number_of_times_each_philosopher_must_eat;
+	// pthread_t	monitoring_thread;
+	// long			time_to_die;
+	// long			time_to_eat;
+	// long			time_to_sleep;
+	// long			number_of_times_each_philosopher_must_eat;
 	unsigned int	meals_count;
-	unsigned long	starting_time;
 	unsigned long	last_meal_tstamp;
 	sem_t			*sem_last_meal;
 	t_data			*data;
@@ -116,7 +120,8 @@ void				exit_parent(t_philo *philo, t_data *data);
 /* utils */
 bool				valid_input(int args_nb, char **inputs);
 long				ft_atoi(const char *nb_str);
-long				get_current_time(t_philo *philo);
+long long			get_current_time(void);
+long long			get_relative_time(t_philo *philo);
 void				ft_usleep(t_philo *philo, t_data *data, int state,
 						pthread_t *philo_monitor);
 void				print_state(t_philo *philo, t_data *data, int state);

@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 21:23:04 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/20 16:01:31 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 12:12:05 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ void	*check_meals_routine(void *data_check)
 	//printf("entering check_meals_routine()\n");
 	i = 0;
 	data = (t_data *)data_check;
+	if (data->time_to_die > data->time_to_eat)
+	{
+		while (get_current_time() < data->starting_time) // + data->time_to_eat / 2)
+			usleep(100);
+	}
+	else
+	{
+		while (get_current_time() < data->starting_time) // + data->time_to_die / 2)
+			usleep(100);
+	}
 	while (i < data->philos_count)
 	{
 		sem_wait(data->sem_ate_enough);

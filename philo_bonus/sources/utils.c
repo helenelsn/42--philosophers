@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 22:57:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/09/19 23:00:21 by Helene           ###   ########.fr       */
+/*   Updated: 2023/09/25 12:23:12 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 void	print_state(t_philo *philo, t_data *data, int state)
 {
 	sem_wait(data->sem_state_msg);
-	if (sem_open(SEMA_END, 0) != SEM_FAILED)
+	if (check_create_state(philo->data, philo->philo_id))
 	{
 		sem_post(data->sem_state_msg);
 		return ;
 	}
-	printf("%ld %d ", get_current_time(philo), philo->philo_id + 1);
+	printf("%lld %d ", get_relative_time(philo), philo->philo_id + 1);
 	if (state == eating)
 		printf("is eating\n");
 	else if (state == sleeping)
@@ -32,13 +32,17 @@ void	print_state(t_philo *philo, t_data *data, int state)
 	sem_post(data->sem_state_msg);
 }
 
-long	get_current_time(t_philo *philo)
+long long	get_current_time(void)
 {
 	struct timeval	curr_tv;
 
 	gettimeofday(&curr_tv, NULL);
-	return ((curr_tv.tv_sec * 1000 + curr_tv.tv_usec / 1000)
-		- philo->starting_time);
+	return (curr_tv.tv_sec * 1000 + curr_tv.tv_usec / 1000);
+}
+
+long long	get_relative_time(t_philo *philo)
+{
+	return (get_current_time() - philo->data->starting_time);
 }
 
 /*
@@ -51,13 +55,13 @@ void	ft_usleep(t_philo *philo, t_data *data, int state,
 {
 	unsigned int	state_length;
 
-	state_length = get_current_time(philo) + philo->time_to_eat;
+	state_length = get_relative_time(philo) + philo->data->time_to_eat;
 	if (state == sleeping)
-		state_length = get_current_time(philo) + philo->time_to_sleep;
+		state_length = get_relative_time(philo) + philo->data->time_to_sleep;
 	else if (state == thinking)
-		state_length = get_current_time(philo) + ((philo->time_to_die
-					- philo->time_to_eat - philo->time_to_sleep) / 2);
-	while (get_current_time(philo) < state_length)
+		state_length = get_relative_time(philo) + ((philo->data->time_to_die
+					- philo->data->time_to_eat - philo->data->time_to_sleep) / 2);
+	while (get_relative_time(philo) < state_length)
 	{
 		if (check_create_state(data, philo->philo_id))
 			exit_philo(philo, data, philo_monitor);
