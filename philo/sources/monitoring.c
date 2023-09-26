@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 18:03:41 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/25 16:51:20 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/26 16:29:03 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	supervise_simulation(t_philo *philos)
 			philos->data->end_simulation = true;
 			pthread_mutex_unlock(&philos->data->end_simulation_m);
 		}
-		usleep(10);
+		usleep(500);
 	}
 	return ;
 }

@@ -1,4 +1,0 @@
-- Programme ne s'arrete pas avec par exemple ./philo 1 1500 600 200 (avec 1 philo quoi)
-
-valgrind --tool=helgrind ./philo 32 420 200 200 6 
-(pthread_mutex_destroy() failed : trying to destroy a locked mutex)

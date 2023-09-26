@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 23:21:59 by hlesny            #+#    #+#             */
-/*   Updated: 2023/09/25 16:50:54 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/09/26 16:34:21 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,23 @@ void	wait_for_starting_time(t_data *data)
 
 void	set_end(t_philo *philo)
 {
-	int	i;
+	int		i;
+	sem_t	*temp;
 
 	i = 0;
 	end_simulation(philo->data);
 	while (i < philo->data->philos_count)
 		(sem_post(philo->data->sem_ate_enough), i++);
 	sem_wait(philo->data->sem_state_msg);
-	if (sem_open(SEMA_END_MSG, 0) == SEM_FAILED && errno == ENOENT)
+	temp = sem_open(SEMA_END_MSG, 0);
+	if (errno == ENOENT && temp == SEM_FAILED)
 	{
 		philo->data->sem_end_msg = sem_open(SEMA_END_MSG,
 				SEMA_FLAGS, SEMA_MODES, 0);
 		printf("%lld %d died\n", get_relative_time(philo), philo->philo_id + 1);
 	}
+	else
+		sem_close(temp);
 	sem_post(philo->data->sem_state_msg);
 	sem_post(philo->data->sem_forks);
 }
